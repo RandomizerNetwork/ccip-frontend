@@ -4,16 +4,17 @@ import { TransferDetails } from '../../../../utils/types/ccip';
 import ccipConfig from '../../../../utils/providers/chainlink/ccip/config';
 import routerAbi from '../../../../utils/providers/chainlink/ccip/abi/Router.json';
 import offRampAbi from '../../../../utils/providers/chainlink/ccip/abi/OffRamp.json';
+import { TransactionReceipt, TransactionRequest } from '@ethersproject/providers';
 // import { triggerToast } from '@/utils/helpers/toast';
 // import erc20Abi from '@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
 
 const CCIPTransferTokens = async (
   details: TransferDetails,
+  // sendTx: any,
+  // receipt: any
   // ccipFees: string,
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  sendTx: any,
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  receipt: any
+  sendTx: TransactionRequest,
+  receipt: TransactionReceipt
   // message: Message,
 ): Promise<string> => {
   const {
@@ -167,9 +168,7 @@ const CCIPTransferTokens = async (
     const messageId = await ethersProvider.call(call, receipt.blockNumber - 2);
 
     console.log(
-      `\n✅ ${amountBN.toString()} of Tokens(${tokenAddress}) Sent to account ${destinationAccount} on destination chain ${destinationChain} using CCIP. Transaction hash ${
-        sendTx.hash
-      } -  Message id is ${messageId}`
+      `\n✅ ${amountBN.toString()} of Tokens(${tokenAddress}) Sent to account ${destinationAccount} on destination chain ${destinationChain} using CCIP. Transaction hash sendTx.hash -  Message id is ${messageId}`
     );
 
     /*
