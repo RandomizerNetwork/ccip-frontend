@@ -1,6 +1,6 @@
 // CCIPBridgeTokensButton.tsx
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useSetChain } from '@web3-onboard/react';
+// import { useSetChain } from '@web3-onboard/react';
 import { BigNumber, ethers } from 'ethers';
 import { formatEther } from '@ethersproject/units';
 import { Message, TransferDetails } from '@/utils/types/ccip';
@@ -13,6 +13,9 @@ import CCIPApproveModal from './CCIPApproveModal';
 import erc20Abi from '@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
 import ccipConfig from '@/utils/providers/chainlink/ccip/config';
 import routerAbi from '@/utils/providers/chainlink/ccip/abi/Router.json';
+import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers5/react';
+import getChainsByID from '@/utils/providers/chainlink/ccip/config/chainsByID';
+import changeNetwork from '@/utils/helpers/changeNetwork';
 
 interface IBridgeButton {
   fromNetwork: string;
@@ -33,23 +36,26 @@ export default function CCIPBridgeTokensButton({
   ccipFees,
   message,
 }: IBridgeButton) {
-  const { ethersProvider, account } = useWallet();
-  const [{ connectedChain }, setChain] = useSetChain();
+  const { ethersProvider, address } = useWallet();
+  // const [{ connectedChain }, setChain] = useSetChain();
   const parsedFee = ethers.utils.parseEther(ccipFees);
 
+  const { chainId, isConnected } = useWeb3ModalAccount();
+  const { walletProvider } = useWeb3ModalProvider()
+  
   useEffect(() => {
     setToNetwork(ccipRouterConfig.getRouterConfig(fromNetwork).lanes[0]);
   }, [fromNetwork, setToNetwork]);
 
   const [retriggerState, setRetriggerState] = useState(false);
-  const [btclpAllowance, setBtclpAllowance] = useState('0.00');
+  const [bnmAllowance, setBtclpAllowance] = useState('0.00');
   const [feeTokenAllowance, setFeeTokenAllowance] = useState('0.00');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalApprovalSelection, setModalApprovalSelection] = useState(true);
 
   // APPROVAL
-  const [btclpApproved, setBtclpApproved] = useState(false);
+  const [bnmApproved, setBtclpApproved] = useState(false);
   const [feeTokenApproved, setFeeTokenApproved] = useState(false);
 
   // Get the router's address for the specified chain
@@ -66,16 +72,16 @@ export default function CCIPBridgeTokensButton({
 
   const amountBN: BigNumber = ethers.utils.parseEther(amount.replace(',', '.'));
 
-  // Function to check BTCLP approval
-  const checkBTCLPApproval = async () => {
+  // Function to check BnM approval
+  const checkBnMApproval = async () => {
     try {
-      // Check BTCLP allowance
+      // Check BnM allowance
       // if (Number(amount) === 0) return;
-      if (!details.ethersProvider) return;
+      if (!ethersProvider) return;
       const erc20 = new ethers.Contract(
         details.tokenAddress,
         erc20Abi,
-        details.fromNetworkProvider
+        ethersProvider
       );
       const allowance: BigNumber = await erc20.allowance(
         details.senderAddress,
@@ -95,33 +101,33 @@ export default function CCIPBridgeTokensButton({
       if (amountBN.gte(allowance)) {
         setBtclpApproved(false);
       }
-      // setBtclpApproved(false);
+      setBtclpApproved(false);
     } catch (error) {
-      console.log('error in checkBTCLPApproval', error);
+      console.log('error in checkBnMApproval', error);
       setBtclpApproved(false);
       // triggerToast('ERROR');
     }
   };
 
-  // Function to approve BTCLP
-  const approveBTCLP = async () => {
+  // Function to approve BnM
+  const approveBnM = async () => {
     try {
-      // Pay native
-      // First approve the router to spend tokens
-      // After approval, setBtclpApproved(true);
-      if (!details.ethersProvider) return 'Missing ethersProvider';
-      const signer = details.ethersProvider.getSigner();
-      if (!signer) return 'Missing signer';
-      if (connectedChain && connectedChain.id !== getChainID(fromNetwork)) {
-        setChain({ chainId: getChainID(fromNetwork) });
-        return 'Switching chain';
+      if (!chainId) return
+      if (`0x${chainId.toString(16)}` !== getChainID(fromNetwork)) {
+        console.log('`0x${chainId.toString(16)}` !== getChainID(fromNetwork)', `0x${chainId.toString(16)}` !== getChainID(fromNetwork))
+        changeNetwork(isConnected, walletProvider, getChainID(fromNetwork));
+        return;
       }
+      // First approve the router to spend tokens, after approval, setBtclpApproved(true);
+      if (!ethersProvider) return 'Missing ethersProvider';
+      const signer = ethersProvider.getSigner();
+      if (!signer) return 'Missing signer';
+      // if (connectedChain !== getChainID(fromNetwork)) {
+      //   setChain({ chainId: getChainID(fromNetwork) });
+      //   return 'Switching chain';
+      // }
       const erc20 = new ethers.Contract(details.tokenAddress, erc20Abi, signer);
-      // const allowance = await erc20.allowance(
-      //   details.senderAddress,
-      //   sourceRouterAddress
-      // );
-      // if (amountBN > allowance) {
+
       try {
         const approvalTx = await erc20.approve(
           sourceRouterAddress,
@@ -134,7 +140,7 @@ export default function CCIPBridgeTokensButton({
           `1 approved router ${sourceRouterAddress} to spend ${amountBN.toString()} 
             of token ${details.tokenAddress}. Transaction: ${approvalTx.hash}`
         );
-        setBtclpApproved(true);
+        // setBtclpApproved(true);
         setRetriggerState(!retriggerState);
         return 'Approval successful';
       } catch (error) {
@@ -147,7 +153,7 @@ export default function CCIPBridgeTokensButton({
       //   return 'Already approved';
       // }
     } catch (error) {
-      console.log('error in approveBTCLP', error);
+      console.log('error in approveBnM', error);
       setBtclpApproved(false);
       return 'Error in approval process';
     }
@@ -158,10 +164,11 @@ export default function CCIPBridgeTokensButton({
     // logic to check Fee token approval based on checks);
     // setFeeTokenApproved(true/false
     try {
-      // Check BTCLP allowance
+      // Check BnM allowance
       // if (Number(amount) === 0) return;
-      if (!details.ethersProvider) return;
-      const signer = details.ethersProvider.getSigner();
+      // if (!details.ethersProvider) return;
+      if (!ethersProvider) return 'Missing ethersProvider';
+      const signer = ethersProvider.getSigner();
       if (!signer) return;
       if (details.feeTokenAddress !== '') {
         const erc20 = new ethers.Contract(
@@ -185,15 +192,17 @@ export default function CCIPBridgeTokensButton({
         console.log('FEE amountBN >= allowance', amountBN > allowance);
         if (allowance.gte(amountBN)) {
           setFeeTokenApproved(true);
+          return
         } else if (amountBN > allowance) {
           setFeeTokenApproved(false);
+          return
         }
-        // setFeeTokenApproved(false);
+        setFeeTokenApproved(false);
       } else {
         setFeeTokenApproved(true);
       }
     } catch (error) {
-      console.log('error in checkBTCLPApproval', error);
+      console.log('error in checkBnMApproval', error);
       setFeeTokenApproved(false);
       // triggerToast('ERROR');
     }
@@ -205,13 +214,19 @@ export default function CCIPBridgeTokensButton({
       // Pay native
       // First approve the router to spend tokens
       // After approval, setBtclpApproved(true);
-      if (!details.ethersProvider) return 'Missing ethersProvider';
-      const signer = details.ethersProvider.getSigner();
-      if (!signer) return 'Missing signer';
-      if (connectedChain && connectedChain.id !== getChainID(fromNetwork)) {
-        setChain({ chainId: getChainID(fromNetwork) });
-        return 'Switching chain';
+      if (!chainId) return
+      if (`0x${chainId.toString(16)}` !== getChainID(fromNetwork)) {
+        console.log('`0x${chainId.toString(16)}` !== getChainID(fromNetwork)', `0x${chainId.toString(16)}` !== getChainID(fromNetwork))
+        changeNetwork(isConnected, walletProvider, getChainID(fromNetwork));
+        return;
       }
+      if (!ethersProvider) return 'Missing ethersProvider';
+      const signer = ethersProvider.getSigner();
+      if (!signer) return 'Missing signer';
+      // if (connectedChain !== getChainID(fromNetwork)) {
+      //   setChain({ chainId: getChainID(fromNetwork) });
+      //   return 'Switching chain';
+      // }
 
       // Create a contract instance for the router using its ABI and address
       // const sourceRouter = new ethers.Contract(
@@ -307,7 +322,7 @@ export default function CCIPBridgeTokensButton({
       setRetriggerState(!retriggerState);
       return 'Succesfully Approved the CCIP Router to transfer tokens with ERC20 token as fee';
     } catch (error) {
-      console.log('error in approveBTCLP', error);
+      console.log('error in approveBnM', error);
       setBtclpApproved(false);
       triggerToast('ERROR', 'Approval rejected by user!');
       return 'Error in approval process';
@@ -315,24 +330,27 @@ export default function CCIPBridgeTokensButton({
   };
 
   useEffect(() => {
-    checkBTCLPApproval();
+    checkBnMApproval();
     checkFeeTokenApproval();
   }, [
     details,
     ethersProvider,
-    account,
-    btclpApproved,
+    address,
+    bnmApproved,
     feeTokenApproved,
     retriggerState,
   ]);
 
   const handleBridgeCall = async () => {
     try {
-      if (connectedChain && connectedChain.id !== getChainID(fromNetwork)) {
-        setChain({ chainId: getChainID(fromNetwork) });
+      if (!chainId) return
+      if (`0x${chainId.toString(16)}` !== getChainID(fromNetwork)) {
+        console.log('`0x${chainId.toString(16)}` !== getChainID(fromNetwork)', `0x${chainId.toString(16)}` !== getChainID(fromNetwork))
+        changeNetwork(isConnected, walletProvider, getChainID(fromNetwork));
+        return;
       }
       if (amount === '0' || amount === '0.0' || amount === '0.00') return;
-      if (!account?.address || !ethersProvider || !message) return;
+      if (!address || !ethersProvider || !message) return;
       // const testCCIPTransferTokens = await CCIPTransferTokens(
       //   details,
       //   fees,
@@ -341,8 +359,8 @@ export default function CCIPBridgeTokensButton({
       // console.log('testCCIPTransferTokens', testCCIPTransferTokens);
 
       // Create a contract instance for the router using its ABI and address
-      if (!details.ethersProvider) return;
-      const signer = details.ethersProvider.getSigner();
+      // if (!ethersProvider) return;
+      const signer = ethersProvider.getSigner();
       if (!signer) return;
       const sourceRouter = new ethers.Contract(
         sourceRouterAddress,
@@ -409,27 +427,27 @@ export default function CCIPBridgeTokensButton({
   };
 
   console.log('details', details);
-  console.log('btclpApproved', btclpApproved);
+  console.log('bnmApproved', bnmApproved);
   console.log('feeTokenApproved', feeTokenApproved);
   // APPROVAL
   return (
     <>
       <div className="flex w-full">
-        {!btclpApproved && (
+        {!bnmApproved && (
           <>
             <button
               // onClick={() => handleBridgeCall()}
-              onClick={() => approveBTCLP()}
+              onClick={() => approveBnM()}
               type="button"
               // disabled={true}
               className="flex flex-col border-chainlinkZircon w-10/12 border-t-2 border-l-2 border-b-2 text-center items-center justify-center bg-chainlinkBiscay rounded-l-lg mt-4 h-20 text-xl"
             >
               <div>
-                Approve {ethers.utils.formatEther(details.amount).toString()}{' '}
+                Approve {modalApprovalSelection && ethers.utils.formatEther(details.amount).toString()}{' '}
                 {details.tokenKey}{' '}
+                {!modalApprovalSelection && 'permanently'}
               </div>
-              {modalApprovalSelection ? '' : 'permanently'}
-              <span className="text-sm">Allowance {btclpAllowance}</span>
+              <span className="text-sm">Allowance {bnmAllowance}</span>
             </button>
             <button
               onClick={() => setIsModalOpen(true)}
@@ -449,7 +467,7 @@ export default function CCIPBridgeTokensButton({
           </>
         )}
 
-        {btclpApproved && !feeTokenApproved && (
+        {bnmApproved && !feeTokenApproved && (
           <>
             <button
               // onClick={() => handleBridgeCall()}
@@ -479,7 +497,7 @@ export default function CCIPBridgeTokensButton({
           </>
         )}
       </div>
-      {btclpApproved && feeTokenApproved && (
+      {bnmApproved && feeTokenApproved && (
         <button
           onClick={() => handleBridgeCall()}
           type="button"

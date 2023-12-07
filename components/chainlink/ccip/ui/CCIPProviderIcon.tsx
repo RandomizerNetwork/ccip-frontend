@@ -18,7 +18,7 @@ const CCIPProviderIcon = ({
   widthSize,
   heightSize,
 }: ICCIPProviderIcon) => {
-  // console.log('CCIPProviderIcon network', network);
+  console.log('CCIPProviderIcon network', network);
   switch (network) {
     case 'ethereumMainnet':
       return (

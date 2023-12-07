@@ -17,10 +17,10 @@ export const assets = {
   optimismTokens,
 };
 
-export const filterNativeAssets = (chainId: string): TokenBalances => {
+export const filterAssetsByChainNumber = (chainId: number): TokenBalances => {
   let nativeAssets;
   switch (chainId) {
-    case '0x01': // 'ethereumMainnet'
+    case 1: // 'ethereumMainnet'
       nativeAssets = {
         nativeCoin: ethereumTokens.nativeCoin,
         wrappedCoin: ethereumTokens.wrappedCoin,
@@ -31,7 +31,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: ethereumTokens.bnm,
       };
       break;
-    case '0xaa36a7': // 'ethereumSepolia'
+    case 11155111: // 'ethereumSepolia'
       nativeAssets = {
         nativeCoin: ethereumTokens.nativeCoin,
         wrappedCoin: ethereumTokens.wrappedCoin,
@@ -42,7 +42,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: ethereumTokens.bnm,
       };
       break;
-    case '0x2105': // 'baseMainnet'
+    case 8453: // 'baseMainnet'
       nativeAssets = {
         nativeCoin: baseTokens.nativeCoin,
         wrappedCoin: baseTokens.wrappedCoin,
@@ -53,7 +53,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: baseTokens.bnm,
       };
       break;
-    case '0x14a33': // 'baseGoerli'
+    case 84531: // 'baseGoerli'
       nativeAssets = {
         nativeCoin: baseTokens.nativeCoin,
         wrappedCoin: baseTokens.wrappedCoin,
@@ -64,7 +64,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: baseTokens.bnm,
       };
       break;
-    case '0xa': // 'optimismMainnet'
+    case 10: // 'optimismMainnet'
       nativeAssets = {
         nativeCoin: optimismTokens.nativeCoin,
         wrappedCoin: optimismTokens.wrappedCoin,
@@ -75,7 +75,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: optimismTokens.bnm,
       };
       break;
-    case '0x1a4': // 'optimismGoerli'
+    case 420: // 'optimismGoerli'
       nativeAssets = {
         nativeCoin: optimismTokens.nativeCoin,
         wrappedCoin: optimismTokens.wrappedCoin,
@@ -86,7 +86,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: optimismTokens.bnm,
       };
       break;
-    case '0xa4b1': // 'arbitrumMainnet'
+    case 42161: // 'arbitrumMainnet'
       nativeAssets = {
         nativeCoin: arbitrumTokens.nativeCoin,
         wrappedCoin: arbitrumTokens.wrappedCoin,
@@ -97,7 +97,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: arbitrumTokens.bnm,
       };
       break;
-    case '0x66eed': // 'arbitrumGoerli'
+    case 421613: // 'arbitrumGoerli'
       nativeAssets = {
         nativeCoin: arbitrumTokens.nativeCoin,
         wrappedCoin: arbitrumTokens.wrappedCoin,
@@ -108,7 +108,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: arbitrumTokens.bnm,
       };
       break;
-    case '0xa86a': // 'avalancheMainnet'
+    case 43114: // 'avalancheMainnet'
       nativeAssets = {
         nativeCoin: avalancheTokens.nativeCoin,
         wrappedCoin: avalancheTokens.wrappedCoin,
@@ -119,7 +119,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: avalancheTokens.bnm,
       };
       break;
-    case '0xa869': // 'avalancheFuji'
+    case 43113: // 'avalancheFuji'
       nativeAssets = {
         nativeCoin: avalancheTokens.nativeCoin,
         wrappedCoin: avalancheTokens.wrappedCoin,
@@ -130,7 +130,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: avalancheTokens.bnm,
       };
       break;
-    case '0x89': // 'polygonMainnet'
+    case 137: // 'polygonMainnet'
       nativeAssets = {
         nativeCoin: polygonTokens.nativeCoin,
         wrappedCoin: polygonTokens.wrappedCoin,
@@ -141,7 +141,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: polygonTokens.bnm,
       };
       break;
-    case '0x13881': // 'polygonMumbai'
+    case 80001: // 'polygonMumbai'
       nativeAssets = {
         nativeCoin: polygonTokens.nativeCoin,
         wrappedCoin: polygonTokens.wrappedCoin,
@@ -152,7 +152,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: polygonTokens.bnm,
       };
       break;
-    case '0x38': // 'binanceMainnet'
+    case 56: // 'binanceMainnet'
       nativeAssets = {
         nativeCoin: binanceTokens.nativeCoin,
         wrappedCoin: binanceTokens.wrappedCoin,
@@ -163,7 +163,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         bnm: binanceTokens.bnm,
       };
       break;
-    case '0x61': // 'binanceTestnet'
+    case 97: // 'binanceTestnet'
       nativeAssets = {
         nativeCoin: binanceTokens.nativeCoin,
         wrappedCoin: binanceTokens.wrappedCoin,

@@ -4,10 +4,10 @@ import {
   ContractCallResults,
   Multicall,
 } from 'ethereum-multicall';
-import { balanceMulticall, balanceOfABI } from 'utils/abi/erc20';
-import { filterNativeAssets } from 'constants/assets';
-import formatEtherToLocaleString from 'utils/formatters/formatEther';
-import formatUnits from 'utils/formatters/formatUnits';
+import { balanceMulticall, balanceOfABI } from '@/utils/abi/erc20';
+import { filterNativeAssets } from '@/constants/assets';
+import formatEtherToLocaleString from '@/utils/formatters/formatEther';
+import formatUnits from '@/utils/formatters/formatUnits';
 
 const multicallBalanceProvider = async (
   activeAccount: string,
@@ -102,8 +102,8 @@ const multicallBalanceProvider = async (
         ],
       },
       {
-        reference: 'btclpContract',
-        contractAddress: filteredNativeAssets.btclp,
+        reference: 'bnmContract',
+        contractAddress: filteredNativeAssets.bnm,
         abi: balanceOfABI,
         calls: [
           {
@@ -131,8 +131,8 @@ const multicallBalanceProvider = async (
       link: formatEtherToLocaleString(
         results?.results?.linkContract.callsReturnContext[0].returnValues[0]
       ),
-      btclp: formatEtherToLocaleString(
-        results?.results?.btclpContract.callsReturnContext[0].returnValues[0]
+      bnm: formatEtherToLocaleString(
+        results?.results?.bnmContract.callsReturnContext[0].returnValues[0]
       ),
       dai: formatEtherToLocaleString(
         results?.results?.daiContract.callsReturnContext[0].returnValues[0]
@@ -156,7 +156,7 @@ const multicallBalanceProvider = async (
       usdc: '0',
       dai: '0',
       link: '0',
-      btclp: '0',
+      bnm: '0',
     };
   }
 };

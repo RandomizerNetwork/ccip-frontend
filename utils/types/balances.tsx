@@ -5,5 +5,5 @@ export type TokenBalances = {
   usdt: string;
   usdc: string;
   link: string;
-  btclp: string;
+  bnm: string;
 };

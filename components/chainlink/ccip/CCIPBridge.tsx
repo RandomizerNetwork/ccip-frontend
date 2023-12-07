@@ -1,99 +1,88 @@
 // CCIPBridge.tsx
-import React, { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import { ethers } from 'ethers';
-import { useDebounce } from 'use-debounce';
-import Lottie from 'lottie-react';
-import Image from 'next/image';
-import useWallet from '@/hooks/useWallet';
+"use client";
+import React, { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { ethers } from "ethers";
+import { useDebounce } from "use-debounce";
+import Lottie from "lottie-react";
+import Image from "next/image";
+import useWallet from "@/hooks/useWallet";
 import ccipRouterConfig, {
   FeeTokens,
-} from '@/utils/providers/chainlink/ccip/config/router';
-import ccipConfig from '@/utils/providers/chainlink/ccip/config';
-import CCIPBridgeTokensButton from './ui/CCIPBridgeTokensButton';
-import CCIPNetworkButton from '@/components/chainlink/ccip/ui/CCIPNetworkButton';
-import getChainlinkCCIPFee from './utils/getChainlinkCCIPFee';
-import { Message, TransferDetails } from '@/utils/types/ccip';
-import CCIPBridgeFeeTokens from './ui/CCIPBridgeFeeTokens';
-import useGlobalState from '@/store/globalState';
-import getChainsByID from '@/utils/providers/chainlink/ccip/config/chainsByID';
-import CCIPAnimation from '@/public/lottie/ccip.json';
-import getChainID from '@/utils/providers/chainlink/ccip/config/chains';
-import erc20Abi from '@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
-import formatEtherToLocaleString from '@/utils/formatters/formatEther';
+} from "@/utils/providers/chainlink/ccip/config/router";
+import ccipConfig from "@/utils/providers/chainlink/ccip/config";
+import CCIPBridgeTokensButton from "./ui/CCIPBridgeTokensButton";
+import CCIPNetworkButton from "@/components/chainlink/ccip/ui/CCIPNetworkButton";
+import getChainlinkCCIPFee from "./utils/getChainlinkCCIPFee";
+import { Message, TransferDetails } from "@/utils/types/ccip";
+import CCIPBridgeFeeTokens from "./ui/CCIPBridgeFeeTokens";
+import useGlobalState from "@/store/globalState";
+import getChainsByID from "@/utils/providers/chainlink/ccip/config/chainsByID";
+import CCIPAnimation from "@/public/lottie/ccip.json";
+import erc20Abi from "@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json";
+import formatEtherToLocaleString from "@/utils/formatters/formatEther";
+import { useWeb3ModalAccount } from "@web3modal/ethers5/react";
+import CCIPTokenIcon from "./ui/CCIPTokenIcon";
 
 // TODO CCIP UI
 // [x] 1. FEE TOKENS MINI-MODAL
-// [X] 2. BTCLP IS IN FACT BnM ON TESTNETS ON EVERY CHAIN WITH CORRECT ADDRESS AND BALANCE
-// [X] 3. BTCLP BALANCE
-// [X] 4. BTCLP CCIP MAX AMOUNT AND CHECK BALANCE AMOUNT
-// [] 5. Approve:
-//    [] 5.1. MAX APPROVAL 1 TIME FOR ROUTER TO SPEND FOR BTCLP
-//    [] 5.2. AMOUNT SELECTED
-// [] 6. Notifications
+// [X] 2. BnM IS IN FACT BnM ON TESTNETS ON EVERY CHAIN WITH CORRECT ADDRESS AND BALANCE
+// [X] 3. BnM BALANCE
+// [X] 4. BnM CCIP MAX AMOUNT AND CHECK BALANCE AMOUNT
+// [x] 5. Approve:
+//    [x] 5.1. MAX APPROVAL 1 TIME FOR ROUTER TO SPEND FOR BnM
+//    [x] 5.2. AMOUNT SELECTED
+// [x] 6. Notifications
 // [] 7. Add CCIP Error handling when the lanes are overused
 // [x] 8. Chain multiple calls toghether with MultiCallV3
-// [] 9. Prepare for Goerli Sunset and moving to Sepolia Testnet
-// [] 10. BTCLP TOKEN DEPLOYMENT ON MAINNET! like you said Polygon will be the primary one since I think that now with CCIP it does not matter anymore if it's on Ethereum or Polygon first.
-// [] 11. Understanding all requirements for CCIP Sender Whitelisting before deployment on mainnet.
-// [] 12. Testnets seems to work, need to start testing on mainnet but need to deploy token first
+// [x] 9. Prepare for Goerli Sunset and moving to Sepolia Testnet Arbitrum
+// [] 10. Understanding all requirements for CCIP Sender Whitelisting before deployment on mainnet.
+// [] 11. Testnets now work, need to start building on mainnet, but need to create contracts first.
 
-// TODO BTCLP UI
+// TODO BnM UI
 // [X] 1. MULTICHAIN TOKENS:
 //    [X] 1.1. get balances for both NATIVE COIN & WERC20
 //    [X] 1.2. get symbol keeys from FEE TOKENS LIST
 //    [X] 1.3. get logos for NATIVE and WERC20
 // [x] 2. add debounce for token value input
-// [] 3. create a modal where players can swap any token and purchase tickets directly on a single chain or crosschain with CCIP.
-// [] 4. prepare frontend for Daily CCIP Raffles
+// [x] 3. create a modal where players can swap any token and purchase tickets directly on a single chain or crosschain with CCIP.
 
-// TODO BTCLP TOKEN
-// [] 1. deploy BTCLP ERC677 Token on all 7 Whitelisted blockchains with MINT/BURN methods and add ACCESS_ROLE to Pool of Tokens as MINTER. Wondering if there would be any gas advantage if we used ERC677 transferAndCall method and do the tranfer in 1 tx instead of 2 with approve -> transferFrom. I think i'm basically asking if we can use IERC677 or just stick to IERC20?
-// [] 2. wondering how we could renounce ownership later? how should we think of this situation?
-
-// TODO BTCLP SMART CONTRACTS
+// TODO BnM SMART CONTRACTS
 // [] 2. create and automate liquidity generated from fees with Automation Keepers
-// [] 1. optimize BTCLP CORE for Daily Draws
-// [] 3. optimize CCIP Daily LINK Raffle
-// [] 4. deploy CCIP Daily LINK Raffle
-// [] 5. deploy CCIP Daily BTCLP Raffle
-// [] 6. deploy CCIP Daily WBTC Raffle
-
-// TODO PROTOCOL DASHBOARD
-// Configure and Deploy your own Custom Raffle
+// [] 1. optimize BnM CORE for Daily Draws
 
 // TODO
-// [] 1. General Access Single Token
-// [] 2. General Access Multi Token
+// [x] 1. General Access Single Token
+// [-] 2. General Access Multi Token
 // [] 3. Private Beta Single Token
 // [] 4. Private Beta Multi Token
 // [] 5. Private Beta NFT Bridge
 // [] 6. Private Beta DeFi Bridge
 
 export default function CCIPBridge() {
-  const { ethersProvider, account, connectedChain } = useWallet();
-  const [updateBalances, setUpdateBalances] = useGlobalState('updateBalances');
-  const [balances] = useGlobalState('balances');
-  const [fromNetwork, setFromNetwork] = useGlobalState('fromNetwork');
-  const [toNetwork, setToNetwork] = useGlobalState('toNetwork');
+  const { ethersProvider } = useWallet();
 
+  const { address, chainId, isConnected } = useWeb3ModalAccount();
+  const [fromNetwork, setFromNetwork] = useGlobalState("fromNetwork");
+  const [toNetwork, setToNetwork] = useGlobalState("toNetwork");
+  const [, setUpdateBalances] = useGlobalState("updateBalances");
+  
   const [generatedMessage, setMessage] = useState<Message>();
   const [feeTokens, setFeeTokens] = useState<FeeTokens>();
-  const [selectedFeeToken, setSelectedFeeToken] = useState<string>('');
-  const [selectedTokenBalance, setSelectedTokenBalance] =
-    useState<string>('0.00');
-  const [selectedFeeSymbol, setSelectedFeeSymbol] = useState<string>('ETH');
+  const [selectedFeeToken, setSelectedFeeToken] = useState<string>("");
+  const [selectedTokenBalance, setSelectedTokenBalance] = useState<string>("0.00");
+  const [selectedFeeSymbol, setSelectedFeeSymbol] = useState<string>("ETH");
   const [openFeeTokenModal, setOpenFeeTokenModal] = useState<boolean>(false);
-  const [ccipFees, setCcipFees] = useState<string>('0');
-  const [amount, setAmount] = useState<string>('0');
+  const [ccipFees, setCcipFees] = useState<string>("0");
+  const [amount, setAmount] = useState<string>("0");
 
   const [debouncedAmount] = useDebounce(amount, 500); // 500ms delay
 
   useEffect(() => {
-    if (connectedChain) {
-      setFromNetwork(getChainsByID(connectedChain.id));
+    if (chainId) {
+      setFromNetwork(getChainsByID(`0x${chainId.toString(16)}`));
     }
-  }, [connectedChain, setFromNetwork]);
+  }, [address, chainId, isConnected]);
 
   const details: TransferDetails = useMemo(() => {
     const fromNetworkProvider = new ethers.providers.JsonRpcProvider(
@@ -104,14 +93,14 @@ export default function CCIPBridge() {
       ethersProvider,
       sourceChain: fromNetwork,
       destinationChain: toNetwork,
-      destinationAccount: (account && account.address) ?? '',
+      destinationAccount: address ?? "",
       tokenAddress:
-        ccipRouterConfig.getRouterConfig(fromNetwork).whitelistedTokens.BTCLP,
+        ccipRouterConfig.getRouterConfig(fromNetwork).whitelistedTokens.BnM,
       tokenKey: Object.keys(
         ccipRouterConfig.getRouterConfig(fromNetwork).whitelistedTokens
       )[0],
-      amount: ethers.utils.parseEther(debouncedAmount.replace(',', '.')),
-      senderAddress: (account && account.address) ?? '',
+      amount: ethers.utils.parseEther(debouncedAmount.replace(",", ".")),
+      senderAddress: address ?? "",
       feeTokenAddress: selectedFeeToken,
       feeTokenSymbol: selectedFeeSymbol,
       ccipFees,
@@ -120,7 +109,7 @@ export default function CCIPBridge() {
     ethersProvider,
     fromNetwork,
     toNetwork,
-    account,
+    address,
     selectedFeeToken,
     debouncedAmount,
     ccipFees,
@@ -130,7 +119,7 @@ export default function CCIPBridge() {
   // get balances
   useEffect(() => {
     try {
-      setUpdateBalances(true);
+      // setUpdateBalances(true);
       const fetchBalance = async () => {
         const fromNetworkProvider = new ethers.providers.JsonRpcProvider(
           ccipConfig.getProviderRpcUrl(fromNetwork)
@@ -142,38 +131,38 @@ export default function CCIPBridge() {
         );
         if (!details.senderAddress) return;
         try {
-          console.log('details.senderAddress', details.senderAddress);
+          console.log("details.senderAddress", details.senderAddress);
           const erc20Balance = await erc20Token.balanceOf(
             details.senderAddress
           );
           setSelectedTokenBalance(formatEtherToLocaleString(erc20Balance));
         } catch (error) {
-          console.log('fromNetwork balance error inside', error);
+          console.log("fromNetwork balance error inside", error);
         }
       };
       fetchBalance();
     } catch (error) {
-      console.log('fromNetwork balance error', error);
+      console.log("fromNetwork balance error", error);
     }
     return () => {
       setUpdateBalances(false);
     };
-  }, [details, fromNetwork, setUpdateBalances]);
+  }, [details, fromNetwork]);
 
   const updateAmount = (value: string) => {
     // Allow numbers, comma, and dot, but ensure there is at least one digit before or after the decimal point
     const regex = /^(\d+[.,]?\d*|[.,]\d+)$/;
-    // if (selectedTokenBalance === '0' || selectedTokenBalance === '0.0' || selectedTokenBalance === '0.00') {
-    //   setAmount('0');
-    // }
-    if (value === '' || value === '.' || value === ',') {
+    if (selectedTokenBalance === '0' || selectedTokenBalance === '0.0' || selectedTokenBalance === '0.00') {
       setAmount('0');
-    } else if (value === '0') {
+    }
+    if (value === "" || value === "." || value === ",") {
+      setAmount("0");
+    } else if (value === "0") {
       // Allow explicitly setting the value to '0'
       setAmount(value);
     } else if (regex.test(value)) {
       // Replace commas with dots and remove leading zeros
-      const cleanedValue = value.replace(',', '.').replace(/^0*(?=\d)/, '');
+      const cleanedValue = value.replace(",", ".").replace(/^0*(?=\d)/, "");
       if (cleanedValue >= selectedTokenBalance) {
         setAmount(selectedTokenBalance);
       } else {
@@ -183,42 +172,37 @@ export default function CCIPBridge() {
   };
 
   useEffect(() => {
-    const getBTCLPFeeTokens = async () => {
+    const getBnMFeeTokens = async () => {
       const availableFeeTokens =
         ccipRouterConfig.getRouterConfig(fromNetwork).feeTokens;
-      // console.log('availableFeeTokens', availableFeeTokens);
+      console.log("availableFeeTokens", availableFeeTokens);
       setFeeTokens(availableFeeTokens);
-      if ('ETH' in availableFeeTokens) {
+      if ("ETH" in availableFeeTokens) {
         // console.log('aici 1');
         setSelectedFeeToken(availableFeeTokens.ETH);
-        setSelectedFeeSymbol('ETH');
+        setSelectedFeeSymbol("ETH");
       }
-      if ('MATIC' in availableFeeTokens) {
+      if ("MATIC" in availableFeeTokens) {
         // console.log('aici 2');
         setSelectedFeeToken(availableFeeTokens.MATIC);
-        setSelectedFeeSymbol('MATIC');
+        setSelectedFeeSymbol("MATIC");
       }
-      if ('AVAX' in availableFeeTokens) {
+      if ("AVAX" in availableFeeTokens) {
         // console.log('aici 3');
         setSelectedFeeToken(availableFeeTokens.AVAX);
-        setSelectedFeeSymbol('AVAX');
+        setSelectedFeeSymbol("AVAX");
       }
-      if ('BNB' in availableFeeTokens) {
+      if ("BNB" in availableFeeTokens) {
         // console.log('aici 4');
         setSelectedFeeToken(availableFeeTokens.BNB);
-        setSelectedFeeSymbol('BNB');
+        setSelectedFeeSymbol("BNB");
       }
-
-      // console.log('Object.keys(ccipRouterConfig.getRouterConfig(fromNetwork).whitelistedTokens)', Object.keys(ccipRouterConfig.getRouterConfig(fromNetwork).whitelistedTokens))
-      // setSelectedTokenSymbol(Object.keys(ccipRouterConfig.getRouterConfig(fromNetwork).whitelistedTokens)[0])
-      // const whitelistedTokens = await getChainlinkCCIPSupportedToken(details);
-      // console.log('whitelistedTokens', whitelistedTokens);
     };
-    getBTCLPFeeTokens();
-  }, [fromNetwork, toNetwork, account, connectedChain]);
+    getBnMFeeTokens();
+  }, [fromNetwork, toNetwork, address, chainId]);
 
   useEffect(() => {
-    const getBTCLPFee = async () => {
+    const getBnMFee = async () => {
       try {
         if (!details.destinationAccount) return;
         if (fromNetwork === toNetwork) return;
@@ -237,37 +221,42 @@ export default function CCIPBridge() {
           return;
         }
 
-        console.log('updatedDetailsBefore', {
+        console.log("updatedDetailsBefore", {
           details,
-          amount: ethers.utils.parseEther(debouncedAmount.replace(',', '.')),
+          amount: ethers.utils.parseEther(debouncedAmount.replace(",", ".")),
         });
 
         const updatedDetails = {
           ...details,
-          amount: ethers.utils.parseEther(debouncedAmount.replace(',', '.')),
+          amount: ethers.utils.parseEther(debouncedAmount.replace(",", ".")),
         };
 
-        console.log('updatedDetails', updatedDetails);
+        console.log("updatedDetails", updatedDetails);
 
         // TODO GRANT APPROVAL - SUPPORT ALL WHITELISTED TOKENS ON BOTH MAINNET AND TESTNET
         const { fees, message } = await getChainlinkCCIPFee(updatedDetails);
-        console.log('fees', fees);
-        console.log('message', message);
+        console.log("fees", fees);
+        console.log("message", message);
         setCcipFees(fees);
         setMessage(message);
       } catch (error) {
-        console.log('error getBTCLPFee', error);
+        console.log("error getBnMFee", error);
       }
     };
-    getBTCLPFee();
-  }, [
-    fromNetwork,
-    toNetwork,
-    account,
-    details,
-    debouncedAmount,
-    connectedChain,
-  ]);
+    getBnMFee();
+  }, [fromNetwork, toNetwork, address, details, debouncedAmount, chainId]);
+
+  const [ccipCategories, setCcipCategories] = useState({
+    categories: ['Public Access', 'Private Beta', 'NFT', 'DeFi', 'Payments', 'Assets'],
+    // addons: ['General Access', 'Private Beta', 'ERC721',  'Liqudity', 'P2P'],
+    addons: ['ERC20', 'ERC20', 'ERC721/1155',  'Liqudity', 'P2P', 'Tokenization'],
+    extra: ['ACTIVE','SOON','SOON','SOON','SOON','SOON']
+  })
+
+  const processCcipCategory = (category: string) => {
+    // Implement your logic here to switch between tabs or handle category selection
+    console.log(`Selected category: ${category}`);
+  }
 
   return (
     <section className={`w-full mx-auto`}>
@@ -275,10 +264,10 @@ export default function CCIPBridge() {
         animationData={CCIPAnimation}
         loop={true}
         style={{
-          position: 'absolute',
-          height: '1111px',
-          width: '100%',
-          margin: '0 auto',
+          position: "absolute",
+          height: "1357px",
+          width: "100%",
+          margin: "0 auto",
         }}
       />
       <div className="absolute mx-auto w-full">
@@ -291,7 +280,7 @@ export default function CCIPBridge() {
           >
             <div className="flex">
               <Image
-                src="https://assets-global.website-files.com/5f6b7190899f41fb70882d08/648c8655667959beb00b4a76_icon-product_ccip.svg"
+                src="/images/tokens/BnM.svg"
                 loading="lazy"
                 alt="Chainlink CCIP logo"
                 width={23}
@@ -310,11 +299,24 @@ export default function CCIPBridge() {
         <h3 className="flex w-full items-center justify-center text-center z-80 text-2xl my-2 text-chainlinkBiscay">
           The era of secure blockchain interoperability has arrived.
         </h3>
+        <section id="ccipCategories" className="sm:flex sm:flex-row justify-center w-full mt-5">
+          {ccipCategories.categories.map((category, index) => (
+            <button
+              key={index}
+              onClick={() => processCcipCategory(category)}
+              className="w-28 sm:w-36 rounded-lg px-1 sm:px-4 py-2 mx-2 text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:border-chainlinkBlue focus:ring-opacity-50 transition duration-300 ease-in-out"
+            >
+              <div className="text-md bg-chainlinkBlue p-1 rounded-tl rounded-tr">{category}</div>
+              <div className="text-sm bg-chainlinkMirage rounded-bl rounded-br">{ccipCategories.addons[index]}</div>
+              <div className="text-xs text-chainlinkBlue mt-1">{ccipCategories.extra[index]}</div>
+            </button>
+          ))}
+        </section>
         <div className={`flex w-full max-w-[480px] h-auto mx-auto my-4`}>
           <div
             className="bg-chainlinkBiscay w-full rounded-lg p-4"
             style={{
-              boxShadow: '0px 9px 18px 2px rgba(0,0,0,0.71)',
+              boxShadow: "0px 9px 18px 2px rgba(0,0,0,0.71)",
             }}
           >
             <div className="flex justify-between">
@@ -332,7 +334,7 @@ export default function CCIPBridge() {
                 networkLanes={[]}
               />
               <div className="flex items-center justify-center w-12 md:text-xl">
-                {'<->'}
+                {"<->"}
               </div>
               <CCIPNetworkButton
                 setFromToNetwork={setToNetwork}
@@ -353,7 +355,10 @@ export default function CCIPBridge() {
 
             <div className="flex justify-between items-end mt-4 text-lg">
               <div>Amount</div>
-              <div>{selectedTokenBalance} BTCLP</div>
+              <div className="flex flex-row">
+                <div className="mr-2">{selectedTokenBalance} BnM</div>
+                {/* <CCIPTokenIcon /> */}
+              </div>
             </div>
 
             <div className="flex justify-between text-lg mt-1 bg-chainlinkMirage">
@@ -362,9 +367,15 @@ export default function CCIPBridge() {
                 name="tokenAmount"
                 // placeholder="0"
                 value={amount}
-                onChange={e => updateAmount(e.target.value)}
+                onChange={(e) => updateAmount(e.target.value)}
               />
-              <button className="w-1/3">BTCLP</button>
+              <button className="w-1/3 flex flex-row justify-end">
+                <span className="mr-2">
+                  {" "}
+                  <CCIPTokenIcon />{" "}
+                </span>
+                <span className="mr-2"> BnM </span>
+              </button>
               <button
                 className="w-1/4 bg-chainlinkBlue hover:bg-opacity-80 border-r-lg"
                 onClick={() => setAmount(selectedTokenBalance)}
@@ -396,9 +407,7 @@ export default function CCIPBridge() {
             <div className="flex justify-center items-center mt-4 w-full text-lg">
               <Link
                 target="_blank"
-                href={`https://ccip.chain.link/address/${
-                  account?.address ?? ''
-                }`}
+                href={`https://ccip.chain.link/address/${address ?? ""}`}
                 rel="noopener noreferrer"
                 className="underline"
               >
@@ -408,15 +417,21 @@ export default function CCIPBridge() {
           </div>
         </div>
 
-        <h4 className="flex justify-center w-full text-chainlinkMirage">
-          Built with 💜 by{' '}
+        <div className="flex justify-center w-full text-chainlinkMirage">
+          Built with 💜 by {" "} 
           <div className="ml-1">
-            <Link target="_blank" href="https://www.btclottery.io/">
-              {' '}
-              btclottery.io{' '}
+            <Link target="_blank" href="https://www.randomizer.network/" className="text-chainlinkBlue">
+              {" "}
+              randomizer.network 
             </Link>
           </div>
-        </h4>
+        </div>
+        <div className="flex flex-row justify-center w-full text-chainlinkMirage">
+          <div className="flex justify-center mr-1"> for the </div>
+          <Link target="_blank" href="https://chain.link/hackathon" className="flex justify-center text-chainlinkBlue">
+            {" "} Chainlink Constelation Hackathon
+          </Link>
+        </div>
       </div>
     </section>
   );

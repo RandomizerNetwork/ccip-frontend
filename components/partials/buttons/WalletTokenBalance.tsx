@@ -2,18 +2,19 @@ import daiLogo from '@/public/images/tokens/multi-collateral-dai-logo.svg';
 import usdtLogo from '@/public/images/tokens/tether-usdt-logo.svg';
 import usdcLogo from '@/public/images/tokens/usd-coin-usdc-logo.svg';
 import linkLogo from '@/public/images/tokens/chainlink-equal-width-height.svg';
-import btclpLogo from '@/public/images/tokens/Bitcoin-Lottery-Protocol-Logo.svg';
+import bnmLogo from '@/public/images/tokens/BnM.svg';
 import BalancesRow from '../network/BalanceRow';
 import useGlobalState from '@/store/globalState';
-import useWallet from '@/hooks/useWallet';
+import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
 import getChainTokens from '@/utils/providers/chainlink/ccip/config/chainTokens';
 
 export default function WalletTokenBalance() {
   const [balances] = useGlobalState('balances');
-  const { connectedChain } = useWallet();
+  const { chainId } = useWeb3ModalAccount()
   if (!balances) return null;
-  if (!connectedChain) return null;
-  const chainTokens = getChainTokens(connectedChain.id);
+  if (!chainId) return null;
+  const chainHexId = `0x${chainId.toString(16)}`;
+  const chainTokens = getChainTokens(chainHexId);
   return (
     <div className="w-full mb-5">
       <ul className="w-full flex items-start flex-col">
@@ -41,7 +42,7 @@ export default function WalletTokenBalance() {
           balance={balances.usdc}
           isLast={false}
         />
-        {connectedChain.id !== '0x2105' && connectedChain.id !== '0x14a33' && (
+        {chainHexId !== '0x2105' && chainHexId !== '0x14a33' && (
           <BalancesRow
             logo={usdtLogo}
             label="USDT"
@@ -56,9 +57,9 @@ export default function WalletTokenBalance() {
           isLast={false}
         />
         <BalancesRow
-          logo={btclpLogo}
-          label="BTCLP"
-          balance={balances.btclp}
+          logo={bnmLogo}
+          label="BnM"
+          balance={balances.bnm}
           isLast={true}
         />
       </ul>

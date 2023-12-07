@@ -3,12 +3,12 @@
 // Import necessary modules and data
 import { BigNumber, constants, providers, Contract, utils } from 'ethers';
 import { useEffect, useState } from 'react';
-import ccipConfig from '@/utils/providers/chainlink/ccip/config';
-import routerAbi from '@/utils/providers/chainlink/ccip/abi/Router.json';
-import offRampAbi from '@/utils/providers/chainlink/ccip/abi/OffRamp.json';
-import erc20Abi from '@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
-import useWallet from '@/hooks/useWallet';
-import { ICCIPFee, Message, TransferDetails } from '@/utils/types/ccip';
+import ccipConfig from '../../../../utils/providers/chainlink/ccip/config';
+import routerAbi from '../../../../utils/providers/chainlink/ccip/abi/Router.json';
+import offRampAbi from '../../../../utils/providers/chainlink/ccip/abi/OffRamp.json';
+import erc20Abi from '../../../../utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
+import useWallet from '../../../../hooks/useWallet';
+import { ICCIPFee, Message, TransferDetails } from '../../../../utils/types/ccip';
 
 // Command: node src/transfer-tokens.js sourceChain destinationChain destinationAccount tokenAddress amount feeTokenAddress(optional)
 // Examples(sepolia):

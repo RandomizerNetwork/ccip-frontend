@@ -2,15 +2,10 @@
 import React, { useEffect, useRef } from 'react';
 import { RiWechatChannelsLine } from 'react-icons/ri';
 import Link from 'next/link';
-import {
-  FaTelegramPlane,
-  FaDiscord,
-  FaGithub,
-  FaTwitter,
-  FaFacebook,
-} from 'react-icons/fa';
+
 import useGlobalState from '@/store/globalState';
 import RotatingArrow from './RotatingArrow';
+import SocialMedia from './SocialMedia';
 
 export default function LeftDrawer() {
   const [sideNavMenuOpen, setSideNavMenuOpen] =
@@ -92,7 +87,7 @@ export default function LeftDrawer() {
 
           <div className="flex flex-col items-center mt-4 mx-2">
             <Link
-              href="https://docs.btclottery.io/bitcoin-lottery-protocol"
+              href="https://docs.chain.link/ccip"
               target="_blank"
               className="w-56 text-lg text-white bg-chainlinkBlue font-medium rounded-lg py-2.5 text-center flex justify-around items-center"
             >
@@ -100,67 +95,7 @@ export default function LeftDrawer() {
             </Link>
           </div>
 
-          <div className="flex flex-col items-center mt-4 mx-2">
-            <div className="mb-4">Social Media</div>
-
-            <div className="flex mt-5 sm:mt-0 space-x-6 sm:justify-centerjustify-center m-auto md:m-0">
-              <Link
-                href="https://www.facebook.com/btclottery.io/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div className="text-white-300 hover:text-white-900 dark:hover:text-white">
-                  <FaFacebook />
-                  <span className="sr-only">Facebook page</span>
-                </div>
-              </Link>
-              <Link
-                href="https://twitter.com/BTCLProtocol"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div className="text-white-300 hover:text-white-900 dark:hover:text-white">
-                  <FaTwitter />
-                  <span className="sr-only">Twitter page</span>
-                </div>
-              </Link>
-
-              <div className="flex flex-col justify-center">
-                <Link
-                  href="https://discord.com/channels/806829532081815552/806829532081815555"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="text-white-300 hover:text-white-900 dark:hover:text-white">
-                    <FaDiscord />
-                    <span className="sr-only">Discord account</span>
-                  </div>
-                </Link>
-              </div>
-              <div className="flex flex-col justify-center">
-                <Link
-                  href="https://t.me/BitcoinLotteryProtocol"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="text-white-300 hover:text-white-900 dark:hover:text-white">
-                    <FaTelegramPlane />
-                    <span className="sr-only">Telegram account</span>
-                  </div>
-                </Link>
-              </div>
-              <Link
-                href="https://github.com/btclottery"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div className="text-white-300 hover:text-white-900 dark:hover:text-white">
-                  <FaGithub />
-                  <span className="sr-only">GitHub account</span>
-                </div>
-              </Link>
-            </div>
-          </div>
+          <SocialMedia />
         </div>
       </aside>
     </>

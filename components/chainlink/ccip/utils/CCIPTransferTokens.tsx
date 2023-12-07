@@ -1,9 +1,9 @@
 // CCIPTransferTokens.tsx
 import { BigNumber, EventFilter, ethers } from 'ethers';
-import { TransferDetails } from '@/utils/types/ccip';
-import ccipConfig from '@/utils/providers/chainlink/ccip/config';
-import routerAbi from '@/utils/providers/chainlink/ccip/abi/Router.json';
-import offRampAbi from '@/utils/providers/chainlink/ccip/abi/OffRamp.json';
+import { TransferDetails } from '../../../../utils/types/ccip';
+import ccipConfig from '../../../../utils/providers/chainlink/ccip/config';
+import routerAbi from '../../../../utils/providers/chainlink/ccip/abi/Router.json';
+import offRampAbi from '../../../../utils/providers/chainlink/ccip/abi/OffRamp.json';
 // import { triggerToast } from '@/utils/helpers/toast';
 // import erc20Abi from '@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
 

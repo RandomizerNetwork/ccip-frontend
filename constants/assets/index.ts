@@ -1,11 +1,11 @@
-import { ethereumTokens } from 'constants/assets/ethereum';
-import { polygonTokens } from 'constants/assets/polygon';
-import { arbitrumTokens } from 'constants/assets/arbitrum';
-import { avalancheTokens } from 'constants/assets/avalanche';
-import { binanceTokens } from 'constants/assets/binance';
-import { baseTokens } from 'constants/assets/base';
-import { optimismTokens } from 'constants/assets/optimism';
-import { TokenBalances } from '@/utils/types/balances';
+import { ethereumTokens } from '@/constants/assets/ethereum';
+import { polygonTokens } from '@/constants/assets/polygon';
+import { arbitrumTokens } from '@/constants/assets/arbitrum';
+import { avalancheTokens } from '@/constants/assets/avalanche';
+import { binanceTokens } from '@/constants/assets/binance';
+import { baseTokens } from '@/constants/assets/base';
+import { optimismTokens } from '@/constants/assets/optimism';
+import { TokenBalances } from '../../utils/types/balances';
 
 export const assets = {
   ethereumTokens,
@@ -29,7 +29,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: ethereumTokens.usdt,
         usdc: ethereumTokens.usdc,
         link: ethereumTokens.link,
-        btclp: ethereumTokens.btclp,
+        bnm: ethereumTokens.bnm,
       };
       break;
     case '0xaa36a7': // 'ethereumSepolia'
@@ -40,7 +40,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: ethereumTokens.usdt,
         usdc: ethereumTokens.usdc,
         link: ethereumTokens.link,
-        btclp: ethereumTokens.btclp,
+        bnm: ethereumTokens.bnm,
       };
       break;
     case '0x2105': // 'baseMainnet'
@@ -51,7 +51,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: baseTokens.usdt,
         usdc: baseTokens.usdc,
         link: baseTokens.link,
-        btclp: baseTokens.btclp,
+        bnm: baseTokens.bnm,
       };
       break;
     case '0x14a33': // 'baseGoerli'
@@ -62,7 +62,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: baseTokens.usdt,
         usdc: baseTokens.usdc,
         link: baseTokens.link,
-        btclp: baseTokens.btclp,
+        bnm: baseTokens.bnm,
       };
       break;
     case '0xa': // 'optimismMainnet'
@@ -73,7 +73,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: optimismTokens.usdt,
         usdc: optimismTokens.usdc,
         link: optimismTokens.link,
-        btclp: optimismTokens.btclp,
+        bnm: optimismTokens.bnm,
       };
       break;
     case '0x1a4': // 'optimismGoerli'
@@ -84,7 +84,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: optimismTokens.usdt,
         usdc: optimismTokens.usdc,
         link: optimismTokens.link,
-        btclp: optimismTokens.btclp,
+        bnm: optimismTokens.bnm,
       };
       break;
     case '0xa4b1': // 'arbitrumMainnet'
@@ -95,7 +95,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: arbitrumTokens.usdt,
         usdc: arbitrumTokens.usdc,
         link: arbitrumTokens.link,
-        btclp: arbitrumTokens.btclp,
+        bnm: arbitrumTokens.bnm,
       };
       break;
     case '0x66eed': // 'arbitrumGoerli'
@@ -106,7 +106,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: arbitrumTokens.usdt,
         usdc: arbitrumTokens.usdc,
         link: arbitrumTokens.link,
-        btclp: arbitrumTokens.btclp,
+        bnm: arbitrumTokens.bnm,
       };
       break;
     case '0xa86a': // 'avalancheMainnet'
@@ -117,7 +117,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: avalancheTokens.usdt,
         usdc: avalancheTokens.usdc,
         link: avalancheTokens.link,
-        btclp: avalancheTokens.btclp,
+        bnm: avalancheTokens.bnm,
       };
       break;
     case '0xa869': // 'avalancheFuji'
@@ -128,7 +128,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: avalancheTokens.usdt,
         usdc: avalancheTokens.usdc,
         link: avalancheTokens.link,
-        btclp: avalancheTokens.btclp,
+        bnm: avalancheTokens.bnm,
       };
       break;
     case '0x89': // 'polygonMainnet'
@@ -139,7 +139,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: polygonTokens.usdt,
         usdc: polygonTokens.usdc,
         link: polygonTokens.link,
-        btclp: polygonTokens.btclp,
+        bnm: polygonTokens.bnm,
       };
       break;
     case '0x13881': // 'polygonMumbai'
@@ -150,7 +150,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: polygonTokens.usdt,
         usdc: polygonTokens.usdc,
         link: polygonTokens.link,
-        btclp: polygonTokens.btclp,
+        bnm: polygonTokens.bnm,
       };
       break;
     case '0x38': // 'binanceMainnet'
@@ -161,7 +161,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: binanceTokens.usdt,
         usdc: binanceTokens.usdc,
         link: binanceTokens.link,
-        btclp: binanceTokens.btclp,
+        bnm: binanceTokens.bnm,
       };
       break;
     case '0x61': // 'binanceTestnet'
@@ -172,7 +172,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: binanceTokens.usdt,
         usdc: binanceTokens.usdc,
         link: binanceTokens.link,
-        btclp: binanceTokens.btclp,
+        bnm: binanceTokens.bnm,
       };
       break;
     default:
@@ -184,7 +184,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
         usdt: polygonTokens.usdt,
         usdc: polygonTokens.usdc,
         link: polygonTokens.link,
-        btclp: polygonTokens.btclp,
+        bnm: polygonTokens.bnm,
       };
       break;
   }
@@ -200,7 +200,7 @@ export const filterNativeAssets = (chainId: string): TokenBalances => {
       usdt: polygonTokens.usdt,
       usdc: polygonTokens.usdc,
       link: polygonTokens.link,
-      btclp: polygonTokens.btclp,
+      bnm: polygonTokens.bnm,
     };
   }
 

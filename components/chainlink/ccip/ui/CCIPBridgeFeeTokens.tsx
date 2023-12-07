@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import RotatingArrow from '@/components/header/partials/RotatingArrow';
 import CCIPNetworkFeeTokenIcon from './CCIPNetworkFeeTokenIcon';
 import { FeeTokens } from '@/utils/providers/chainlink/ccip/config/router';
+import { v4 as uuidv4 } from 'uuid';
 
 type ICCIPBridgeFeeTokens = {
   ccipFees: string;
@@ -56,7 +56,7 @@ export default function CCIPBridgeFeeTokens({
           Fee
         </div>
         {/* <div>Estimated Fee</div> */}
-        {/* <div>0 BTCLP</div> */}
+        {/* <div>0 BnM</div> */}
         <div className="flex flex-row justify-center items-center">
           <div className="font-thin mr-2">{ccipFees}</div>
           <button

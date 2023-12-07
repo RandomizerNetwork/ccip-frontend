@@ -1,8 +1,8 @@
 import { Contract, ethers } from 'ethers';
-import erc20Abi from '@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
-import routerAbi from '@/utils/providers/chainlink/ccip/abi/Router.json';
-import ccipConfig from '@/utils/providers/chainlink/ccip/config';
-import { TransferDetails } from '@/utils/types/ccip';
+import erc20Abi from '../../../../utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
+import routerAbi from '../../../../utils/providers/chainlink/ccip/abi/Router.json';
+import ccipConfig from '../../../../utils/providers/chainlink/ccip/config';
+import { TransferDetails } from '../../../../utils/types/ccip';
 
 type WhitelistedTokens = {
   symbol: string;

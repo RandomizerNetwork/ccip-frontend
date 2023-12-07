@@ -75,7 +75,7 @@ export const triggerToast = (type: TOAST_TYPE, extraContent?: string) => {
       const data = extraContent
         .split(/[\s#]+/)
         .filter(element => element !== '');
-      toast.success(`Ticket #${data[0]} in round #${data[1]}`, {
+      toast.success(`${data[0]} ${data[1]}`, {
         hideProgressBar: true,
         icon: () => (
           <Image

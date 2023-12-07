@@ -7,6 +7,7 @@ type NetworkIconImage = {
 };
 
 export default function NetworkIcon({ chainId, size }: NetworkIconImage) {
+  // console.log('chainId Network Icon', chainId)
   const { image, label } = getNetworkImage(chainId);
   if (!image || !label) return null;
   return (

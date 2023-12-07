@@ -1,3 +1,4 @@
+'use client';
 import { useEffect } from 'react';
 import { getAddress } from '@ethersproject/address';
 import multicallBalanceProvider from '@/utils/helpers/multicall';
@@ -5,22 +6,22 @@ import useWallet from '@/hooks/useWallet';
 import useGlobalState from '@/store/globalState';
 
 export default function ServicesBalances() {
-  const { connectedChain, ethersProvider, account } = useWallet();
+  const { chainId, ethersProvider, address } = useWallet();
   const [updateBalances] = useGlobalState('updateBalances');
   const [, setBalances] = useGlobalState('balances');
 
   useEffect(() => {
-    if (!connectedChain) return;
+    if (!chainId) return;
     if (!ethersProvider) return;
-    if (!account || !account.address) return;
+    if (!address || !address) return;
 
-    if (updateBalances && getAddress(account.address)) {
+    if (updateBalances && getAddress(address)) {
       // Define an async function inside the useEffect
       const fetchMultisigBalances = async () => {
         try {
           // Process balances
           const balances = await multicallBalanceProvider(
-            account.address,
+            address,
             ethersProvider
           );
           setBalances(balances);
@@ -31,7 +32,7 @@ export default function ServicesBalances() {
 
       fetchMultisigBalances();
     }
-  }, [setBalances, updateBalances, connectedChain, account, ethersProvider]);
+  }, [setBalances, updateBalances, chainId, address, ethersProvider]);
 
   return null;
 }

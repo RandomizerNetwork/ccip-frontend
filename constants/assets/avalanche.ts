@@ -9,7 +9,7 @@ const AVALANCHE_MAINNET_TOKENS: WalletTokenAddressess = {
   dai: '0xd586e7f844cea2f87f50152665bcbc2c279d8d70',
   usdt: '0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7',
   usdc: '0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e',
-  btclp: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
+  bnm: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
 };
 
 const AVALANCHE_TESTNET_TOKENS: WalletTokenAddressess = {
@@ -19,7 +19,7 @@ const AVALANCHE_TESTNET_TOKENS: WalletTokenAddressess = {
   dai: '0x1ffB23bcDb711DB7356FEe9eE0F32cd93Dfd1943',
   usdt: '0xebc0815689fa529be40ef218c1ea798720c45301',
   usdc: '0xf3a9c4dd7fb14e4995da0828b2367888fe8d1de0',
-  btclp: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
+  bnm: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
 };
 
 const isProduction = process.env.NODE_ENV === 'production';

@@ -135,7 +135,7 @@ export const ETHEREUM_SEPOLIA = {
     'https://eth-goerli.g.alchemy.com/v2/oQBY8Oxl5W-8UoX2CP7OtyokBNUB4PH_',
   img: ethereum,
   tokens: LOCAL_TESTNET_TOKENS,
-  explorer: 'https://goerli.etherscan.io/',
+  explorer: 'https://sepolia.etherscan.io/',
 };
 // export const LOCAL_FORK = {
 //   token: 'LOCAL',

@@ -9,7 +9,7 @@ const ARBITRUM_MAINNET_TOKENS: WalletTokenAddressess = {
   dai: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
   usdt: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
   usdc: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
-  btclp: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
+  bnm: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
 };
 
 const ARBITRUM_TESTNET_TOKENS: WalletTokenAddressess = {
@@ -19,7 +19,7 @@ const ARBITRUM_TESTNET_TOKENS: WalletTokenAddressess = {
   dai: '0x1ffB23bcDb711DB7356FEe9eE0F32cd93Dfd1943',
   usdt: '0xebc0815689fa529be40ef218c1ea798720c45301',
   usdc: '0xf3a9c4dd7fb14e4995da0828b2367888fe8d1de0',
-  btclp: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
+  bnm: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
 };
 
 const isProduction = process.env.NODE_ENV === 'production';

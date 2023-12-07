@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  /* background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb)); */
+}
+
+body {
+  overflow-x: hidden;
+  min-width: 320px;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+}
+@keyframes fadeInOut {
+  0% {
+    opacity: 0.5;
+ }
+  50% {
+    opacity: 1;
+ }
+  100% {
+    opacity: 0.5;
+ }
+}
+.pattern-bg {
+  background-color: #305;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 1000'%3E%3Cg %3E%3Ccircle fill='%23330055' cx='50' cy='0' r='50'/%3E%3Cg fill='%233a015d' %3E%3Ccircle cx='0' cy='50' r='50'/%3E%3Ccircle cx='100' cy='50' r='50'/%3E%3C/g%3E%3Ccircle fill='%23410165' cx='50' cy='100' r='50'/%3E%3Cg fill='%2348026e' %3E%3Ccircle cx='0' cy='150' r='50'/%3E%3Ccircle cx='100' cy='150' r='50'/%3E%3C/g%3E%3Ccircle fill='%23500376' cx='50' cy='200' r='50'/%3E%3Cg fill='%2357047e' %3E%3Ccircle cx='0' cy='250' r='50'/%3E%3Ccircle cx='100' cy='250' r='50'/%3E%3C/g%3E%3Ccircle fill='%235f0587' cx='50' cy='300' r='50'/%3E%3Cg fill='%2367068f' %3E%3Ccircle cx='0' cy='350' r='50'/%3E%3Ccircle cx='100' cy='350' r='50'/%3E%3C/g%3E%3Ccircle fill='%236f0798' cx='50' cy='400' r='50'/%3E%3Cg fill='%237707a0' %3E%3Ccircle cx='0' cy='450' r='50'/%3E%3Ccircle cx='100' cy='450' r='50'/%3E%3C/g%3E%3Ccircle fill='%238008a9' cx='50' cy='500' r='50'/%3E%3Cg fill='%238909b1' %3E%3Ccircle cx='0' cy='550' r='50'/%3E%3Ccircle cx='100' cy='550' r='50'/%3E%3C/g%3E%3Ccircle fill='%239109ba' cx='50' cy='600' r='50'/%3E%3Cg fill='%239a09c3' %3E%3Ccircle cx='0' cy='650' r='50'/%3E%3Ccircle cx='100' cy='650' r='50'/%3E%3C/g%3E%3Ccircle fill='%23a309cb' cx='50' cy='700' r='50'/%3E%3Cg fill='%23ad09d4' %3E%3Ccircle cx='0' cy='750' r='50'/%3E%3Ccircle cx='100' cy='750' r='50'/%3E%3C/g%3E%3Ccircle fill='%23b608dc' cx='50' cy='800' r='50'/%3E%3Cg fill='%23c007e5' %3E%3Ccircle cx='0' cy='850' r='50'/%3E%3Ccircle cx='100' cy='850' r='50'/%3E%3C/g%3E%3Ccircle fill='%23c905ee' cx='50' cy='900' r='50'/%3E%3Cg fill='%23d303f6' %3E%3Ccircle cx='0' cy='950' r='50'/%3E%3Ccircle cx='100' cy='950' r='50'/%3E%3C/g%3E%3Ccircle fill='%23D0F' cx='50' cy='1000' r='50'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: contain;
+}
+.__react_component_tooltip {
+  background: #328946 !important;
+  border-radius: 90px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #fff !important;
+}
+.__react_component_tooltip::after {
+  border-top-color: #328946 !important;
+}
+.Toastify__toast-container--top-right {
+  top: 6em;
+}
+.Toastify__toast {
+  border-radius: 20px;
+  font-family: 'Montserrat';
+  font-size: 19px;
+  font-weight: 500;
+  padding: 17px 20px;
+  position: relative;
+  overflow: visible !important;
+  color: white;
+}
+.Toastify__toast p {
+  margin: 0;
+}
+.Toastify__toast.Toastify__toast--success {
+  background: #328946;
+}
+.Toastify__toast.Toastify__toast--error {
+  background: #1a2b6b;
+}
+.Toastify__toast.Toastify__toast--info {
+  background: #1a2b6b;
+}
+.Toastify__toast .Toastify__toast-body {
+  padding: 0;
+  margin: 0;
+  color: #fff;
+}
+.Toastify__toast .Toastify__toast-body .Toastify__toast-icon {
+  width: 44px;
+  height: 44px;
+}
+.Toastify__toast .Toastify__toast-body .Toastify__toast-submsg {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+}
+.Toastify__toast .Toastify__close-button {
+  position: absolute;
+  right: 7px;
+  top: -5px;
+  transform: translate(30%, -30%);
+  background: #fff;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  overflow: visible;
+  opacity: 1;
+  color: #000;
+}
+@media (max-width: 480px) {
+  .Toastify__toast .Toastify__close-button {
+    right: 10px;
+    top: 7px;
+    width: 17px;
+    height: 17px;
+ }
+  .Toastify__toast .Toastify__close-button > svg {
+    width: 18px !important;
+ }
+}
+.Toastify__toast .Toastify__close-button > svg {
+  fill: currentColor;
+  height: 15px;
+  width: 27px;
+}
+#ecosystem, #smartcontract, #free, #atomicswap, #cryptobonus, #voting {
+  margin: 0 auto;
+  height: 150px;
+  width: 150px;
+}
+#navBar, #footer {
+  background: linear-gradient(70deg, #250340 10%, #48147b 40%, #390361 60%, #250340 75%, #250340 100%);
+  border-bottom: 2px solid #491d7f;
+}
+#leftSideBar {
+  background: linear-gradient(0deg, #250340 10%, #48147b 40%, #390361 60%, #250340 85%, #250340 100%);
+  border-bottom: 2px solid #491d7f;
+}
+@media (max-width: 768px) {
+  #dynamicGame {
+    zoom: 83%;
+ }
+  .Toastify__toast-container--top-center, .Toastify__toast-container--top-left, .Toastify__toast-container--top-right {
+    zoom: 100%;
+ }
+}

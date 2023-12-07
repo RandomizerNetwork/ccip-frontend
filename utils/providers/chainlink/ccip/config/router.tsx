@@ -36,7 +36,7 @@ const ethereumMainnet = {
     LINK: '0x514910771AF9Ca656af840dff83E8264EcF986CA',
   },
   whitelistedTokens: {
-    BTCLP: '0x94025780a1aB58868D9B2dBBB775f44b32e8E6e5', // BETS Tokens which is the only 1 whitelisted atm for CCIP
+    BnM: '0x94025780a1aB58868D9B2dBBB775f44b32e8E6e5', // BETS Tokens which is the only 1 whitelisted atm for CCIP
   },
 };
 
@@ -59,7 +59,7 @@ const ethereumSepolia = {
     LINK: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
   },
   whitelistedTokens: {
-    BTCLP: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05', // BnM for TESTNET
+    BnM: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05', // BnM for TESTNET
   },
 };
 
@@ -75,7 +75,7 @@ const ethereumGoerli = {
     LINK: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
   },
   whitelistedTokens: {
-    BTCLP: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05', // BnM for TESTNET
+    BnM: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05', // BnM for TESTNET
   },
 };
 
@@ -91,7 +91,7 @@ const baseMainnet = {
     LINK: '0x88Fb150BDc53A65fe94Dea0c9BA0a6dAf8C6e196',
   },
   whitelistedTokens: {
-    BTCLP: '',
+    BnM: '',
   },
 };
 
@@ -107,7 +107,7 @@ const baseGoerli = {
     LINK: '0xd886e2286fd1073df82462ea1822119600af80b6',
   },
   whitelistedTokens: {
-    BTCLP: '0xbf9036529123de264bfa0fc7362fe25b650d4b16',
+    BnM: '0xbf9036529123de264bfa0fc7362fe25b650d4b16',
   },
 };
 
@@ -123,7 +123,7 @@ const optimismMainnet = {
     LINK: '0x350a791Bfc2C21F9Ed5d10980Dad2e2638ffa7f6',
   },
   whitelistedTokens: {
-    BTCLP: '',
+    BnM: '',
   },
 };
 
@@ -139,7 +139,7 @@ const optimismGoerli = {
     LINK: '0xdc2CC710e42857672E7907CF474a69B63B93089f',
   },
   whitelistedTokens: {
-    BTCLP: '0xaBfE9D11A2f1D61990D1d253EC98B5Da00304F16',
+    BnM: '0xaBfE9D11A2f1D61990D1d253EC98B5Da00304F16',
   },
 };
 
@@ -155,7 +155,7 @@ const avalancheMainnet = {
     LINK: '0x5947BB275c521040051D82396192181b413227A3',
   },
   whitelistedTokens: {
-    BTCLP: '',
+    BnM: '',
   },
 };
 
@@ -171,7 +171,7 @@ const avalancheFuji = {
     LINK: '0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846',
   },
   whitelistedTokens: {
-    BTCLP: '0xD21341536c5cF5EB1bcb58f6723cE26e8D8E90e4',
+    BnM: '0xD21341536c5cF5EB1bcb58f6723cE26e8D8E90e4',
   },
 };
 
@@ -187,7 +187,7 @@ const arbitrumMainnet = {
     LINK: '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4',
   },
   whitelistedTokens: {
-    BTCLP: '',
+    BnM: '',
   },
 };
 
@@ -203,7 +203,7 @@ const arbitrumGoerli = {
     LINK: '0xd14838A68E8AFBAdE5efb411d5871ea0011AFd28',
   },
   whitelistedTokens: {
-    BTCLP: '0x0579b4c1C8AcbfF13c6253f1B10d66896Bf399Ef',
+    BnM: '0x0579b4c1C8AcbfF13c6253f1B10d66896Bf399Ef',
   },
 };
 
@@ -224,7 +224,7 @@ const polygonMainnet = {
     LINK: '0xb0897686c545045aFc77CF20eC7A532E3120E0F1',
   },
   whitelistedTokens: {
-    BTCLP: '',
+    BnM: '',
   },
 };
 
@@ -245,7 +245,7 @@ const polygonMumbai = {
     LINK: '0x326C977E6efc84E512bB9C30f76E30c160eD06FB',
   },
   whitelistedTokens: {
-    BTCLP: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
+    BnM: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
   },
 };
 
@@ -266,7 +266,7 @@ const binanceMainnet = {
     LINK: '0x404460C6A5EdE2D891e8297795264fDe62ADBB75',
   },
   whitelistedTokens: {
-    BTCLP: '',
+    BnM: '',
   },
 };
 
@@ -282,7 +282,7 @@ const binanceTestnet = {
     LINK: '0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06',
   },
   whitelistedTokens: {
-    BTCLP: '0xbfa2acd33ed6eec0ed3cc06bf1ac38d22b36b9e9',
+    BnM: '0xbfa2acd33ed6eec0ed3cc06bf1ac38d22b36b9e9',
   },
 };
 

@@ -9,7 +9,7 @@ const BINANCE_MAINNET_TOKENS: WalletTokenAddressess = {
   dai: '0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3',
   usdt: '0x55d398326f99059ff775485246999027b3197955',
   usdc: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
-  btclp: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
+  bnm: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
 };
 
 const BINANCE_TESTNET_TOKENS: WalletTokenAddressess = {
@@ -19,7 +19,7 @@ const BINANCE_TESTNET_TOKENS: WalletTokenAddressess = {
   dai: '0x1ffB23bcDb711DB7356FEe9eE0F32cd93Dfd1943',
   usdt: '0xebc0815689fa529be40ef218c1ea798720c45301',
   usdc: '0xf3a9c4dd7fb14e4995da0828b2367888fe8d1de0',
-  btclp: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
+  bnm: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
 };
 
 const isProduction = process.env.NODE_ENV === 'production';

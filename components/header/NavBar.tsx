@@ -1,3 +1,4 @@
+'use client';
 import { ReactElement } from 'react';
 import LeftNavBar from '@/components/header/partials/LeftNavBar';
 import RightNavBar from '@/components/header/partials/RightNavBar';

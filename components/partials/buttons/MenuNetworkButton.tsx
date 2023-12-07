@@ -5,9 +5,19 @@ import useComponentVisible from '@/hooks/useComponentVisible';
 import useWallet from '@/hooks/useWallet';
 import NetworkIcon from '../network/NetworkIcon';
 import RotatingArrow from '@/components/header/partials/RotatingArrow';
+import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers5/react';
+import { liveChains } from '@/utils/providers/Web3Modal';
+import changeNetwork from '@/utils/helpers/changeNetwork';
+import getChainID from '@/utils/providers/chainlink/ccip/config/chains';
+import useGlobalState from '@/store/globalState';
 
 export default function MenuNetworkButton() {
-  const { wallet, chains, connectedChain, setChain } = useWallet();
+  const { address, chainId, isConnected } = useWeb3ModalAccount();
+  const { walletProvider } = useWeb3ModalProvider()
+  
+  const [fromNetwork] = useGlobalState("fromNetwork");
+
+  console.log('walletProvider', walletProvider)
 
   const { refs, active, setActive, handleButtonClick } = useComponentVisible<
     HTMLButtonElement,
@@ -19,12 +29,12 @@ export default function MenuNetworkButton() {
   useEffect(() => {
     try {
       let counter = 0;
-      for (let i = 0; i < chains.length; i += 1) {
-        if (connectedChain?.id === chains[i].id) {
-          setActiveChainLabel(chains[i].label ?? '');
+      for (let i = 0; i < liveChains.length; i += 1) {
+        if (chainId === liveChains[i].chainId) {
+          setActiveChainLabel(liveChains[i].name ?? '');
         } else {
           counter += 1;
-          if (counter === chains.length) {
+          if (counter === liveChains.length) {
             setActiveChainLabel('Unsupported Network');
           }
         }
@@ -32,24 +42,24 @@ export default function MenuNetworkButton() {
     } catch (error) {
       console.log('error', error);
     }
-  }, [wallet, connectedChain, chains]);
+  }, [address, chainId, liveChains]);
 
-  const switchChainID = async (chainId: string) => {
-    await setChain({ chainId });
+  const switchChainID = async (chainId: number) => {
+    changeNetwork(isConnected, walletProvider, `0x${chainId.toString(16)}`);
     setActive(false);
   };
 
   return (
     <>
-      {connectedChain && (
+      {isConnected && (
         <button
           ref={refs[0]}
           onClick={handleButtonClick}
-          className="select-none hover:bg-opacity-80 h-10 mx-1 flex pointer border text-white bg-chainlinkBlue border-nftEpic font-medium rounded-lg text-sm px-2 text-center"
+          className="text-white select-none hover:bg-opacity-80 h-10 mx-1 flex pointer border bg-chainlinkBlue border-nftEpic font-medium rounded-lg text-sm px-2 text-center"
         >
           <div className="flex color-white h-full items-center">
             <div className="ml-1 mr-2">
-              <NetworkIcon chainId={connectedChain?.id ?? ''} size={21} />
+              {chainId && <NetworkIcon chainId={`0x${chainId.toString(16)}`} size={21} />}
             </div>
             <div className="hidden md:flex font-medium tracking-[1px]">
               {activeChainLabel}
@@ -58,29 +68,29 @@ export default function MenuNetworkButton() {
           </div>
         </button>
       )}
-      {wallet && active && (
+      {active && (
         <div
           ref={refs[1]}
-          className="fixed w-9/12 sm:w-64 mt-14 ml-2 right-0 bg-chainlinkBiscay rounded-lg"
+          className="text-white fixed w-9/12 sm:w-64 mt-14 ml-2 right-0 bg-chainlinkBiscay rounded-lg"
         >
-          {chains.length > 1 && (
+          {liveChains.length > 1 && (
             <div className="px-2 py-1 bg-chainlinkBlue rounded-t-lg border-b border-chainlinkZircon">
               Networks:{' '}
             </div>
           )}
-          {chains &&
-            chains.map(chain => {
+          {liveChains &&
+            liveChains.map(chain => {
               return (
                 <button
-                  onClick={() => switchChainID(chain.id)}
+                  onClick={() => switchChainID(chain.chainId)}
                   key={uuidv4()}
                   className="w-full py-1 rounded-lg hover:bg-chainlinkBlue"
                 >
                   <div className="flex">
                     <div className="flex pt-2 pb-1 mx-2">
-                      <NetworkIcon chainId={chain.id} size={21} />
+                      <NetworkIcon chainId={`0x${chain.chainId.toString(16)}`} size={21} />
                       <div className="ml-2 font-medium tracking-[1px] flex justify-center items-center">
-                        {chain.label}
+                        {chain.name}
                       </div>
                     </div>
                   </div>
