@@ -12,6 +12,8 @@ import WalletIconButtons from './WalletIconButtons';
 import WalletTokenBalance from './WalletTokenBalance';
 import useGlobalState from '@/store/globalState';
 import { useDisconnect, useWeb3Modal, useWeb3ModalAccount } from '@web3modal/ethers5/react';
+import { liveChains } from '@/utils/providers/Web3Modal';
+import getChainsByID from "@/utils/providers/chainlink/ccip/config/chainsByID";
 
 export default function MenuWalletButton(): ReactElement {
   const [, setUpdateBalances] = useGlobalState('updateBalances');
@@ -32,8 +34,12 @@ export default function MenuWalletButton(): ReactElement {
     if (active) setUpdateBalances(false);
   };
 
-  const switchWallet = () => {
-    // if (address != null) connect();
+  // Function to get explorer URL based on chain ID
+  const getExplorerUrl = (chainId: number) => {
+    // Find the chain in liveChains that matches the given chainId
+    const chain = liveChains.find(chain => chain.chainId === chainId);
+    // Return the explorerUrl if found, else return a default or null
+    return chain ? chain.explorerUrl : null;
   };
 
   return (
@@ -71,7 +77,7 @@ export default function MenuWalletButton(): ReactElement {
           >
             <div className="flex fle-col mt-3 px-3 text-white justify-between">
               <div className="flex flex-row flex-start p-1">
-                <button onClick={() => switchWallet()}>
+                {/* <button onClick={() => switchWallet()}> */}
                   {/* <Image
                     src={`data:image/svg+xml;utf8,${encodeURIComponent(
                       wallet.icon
@@ -81,7 +87,7 @@ export default function MenuWalletButton(): ReactElement {
                     alt="wallet icon"
                     priority={true}
                   /> */}
-                </button>
+                {/* </button> */}
                 {/* {!wallet.accounts[0].ens?.avatar && <span className="flex flex-col justify-center"> <Jazzicon diameter={20} seed={jsNumberForAddress(wallet.accounts[0].address)} /> </span>} */}
                 <button onClick={() => copy(address)}>
                   <div className="ml-2 flex flex-col justify-center text-md">
@@ -105,15 +111,14 @@ export default function MenuWalletButton(): ReactElement {
                   alt="Explore"
                   altText="Exploring"
                   isLast={false}
-                  onClick={() =>
-                    window.open(
-                      `https://${
-                        IS_LOCAL ? 'mumbai.' : ''
-                      }polygonscan.com/address/${address}`,
-                      '_blank',
-                      'noopener,noreferrer'
-                    )
-                  }
+                  onClick={() => {
+                    const explorerUrl = getExplorerUrl(chainId ?? 0);
+                    if (explorerUrl) {
+                      window.open(`${explorerUrl}/address/${address}`, '_blank', 'noopener,noreferrer');
+                    } else {
+                      console.log("Explorer URL not found for chain ID:", chainId);
+                    }
+                  }}
                 />
                 <WalletIconButtons
                   img={DisconnectIcon}

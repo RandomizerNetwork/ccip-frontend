@@ -7,9 +7,7 @@ import { useDebounce } from "use-debounce";
 import Lottie from "lottie-react";
 import Image from "next/image";
 import useWallet from "@/hooks/useWallet";
-import ccipRouterConfig, {
-  FeeTokens,
-} from "@/utils/providers/chainlink/ccip/config/router";
+import ccipRouterConfig, { FeeTokens } from "@/utils/providers/chainlink/ccip/config/router";
 import ccipConfig from "@/utils/providers/chainlink/ccip/config";
 import CCIPBridgeTokensButton from "./ui/CCIPBridgeTokensButton";
 import CCIPNetworkButton from "@/components/chainlink/ccip/ui/CCIPNetworkButton";
@@ -26,38 +24,34 @@ import CCIPTokenIcon from "./ui/CCIPTokenIcon";
 
 // TODO CCIP UI
 // [x] 1. FEE TOKENS MINI-MODAL
-// [X] 2. BnM IS IN FACT BnM ON TESTNETS ON EVERY CHAIN WITH CORRECT ADDRESS AND BALANCE
+// [X] 2. BnM ON EVERY TESTNET CHAIN
 // [X] 3. BnM BALANCE
 // [X] 4. BnM CCIP MAX AMOUNT AND CHECK BALANCE AMOUNT
-// [x] 5. Approve:
-//    [x] 5.1. MAX APPROVAL 1 TIME FOR ROUTER TO SPEND FOR BnM
-//    [x] 5.2. AMOUNT SELECTED
-// [x] 6. Notifications
-// [] 7. Add CCIP Error handling when the lanes are overused
-// [x] 8. Chain multiple calls toghether with MultiCallV3
-// [x] 9. Prepare for Goerli Sunset and moving to Sepolia Testnet Arbitrum
-// [] 10. Understanding all requirements for CCIP Sender Whitelisting before deployment on mainnet.
-// [] 11. Testnets now work, need to start building on mainnet, but need to create contracts first.
-
-// TODO BnM UI
-// [X] 1. MULTICHAIN TOKENS:
-//    [X] 1.1. get balances for both NATIVE COIN & WERC20
-//    [X] 1.2. get symbol keeys from FEE TOKENS LIST
-//    [X] 1.3. get logos for NATIVE and WERC20
-// [x] 2. add debounce for token value input
-// [x] 3. create a modal where players can swap any token and purchase tickets directly on a single chain or crosschain with CCIP.
-
-// TODO BnM SMART CONTRACTS
-// [] 2. create and automate liquidity generated from fees with Automation Keepers
-// [] 1. optimize BnM CORE for Daily Draws
+// [x] 5. Multi Approve BnM + Fee Token in steps
+// [x] 7. Chain multiple balance calls toghether with MultiCallV3
+// [x] 8. Switch from Goerli to Sepolia Testnet RPC for Arbitrum
+// [x] 9. Upgrade to Web3Modal wallets
+// [x] 10. Notifications
+// [X] 11. MULTICHAIN TOKENS:
+//    [X] 11.1. get balances for both NATIVE COIN & WERC20
+//    [X] 11.2. get symbol keeys from FEE TOKENS LIST
+//    [X] 11.3. get logos for NATIVE and WERC20
+// [x] 12. add debounce for token value input
+// [x] 13. Testnets and mainnet works on 7 chains with 7 tokens!
+// [x] 14. create a modal where players can swap any token and purchase tickets directly on a single chain or crosschain with CCIP.
+// [] 15. CREATE EIP712 CCIP TX
+// [] 16. CCIP notifications with token cross chain bridging results
+// [] 17. Add CCIP Error handling when the lanes are overused
 
 // TODO
-// [x] 1. General Access Single Token
-// [-] 2. General Access Multi Token
-// [] 3. Private Beta Single Token
-// [] 4. Private Beta Multi Token
-// [] 5. Private Beta NFT Bridge
-// [] 6. Private Beta DeFi Bridge
+// [x] 1. CCIP Bridge - General Access Single Token
+// [-] 2. CCIP Bridge - General Access Multi Token
+// [-] 3. CCIP Bridge - Private Beta Single Token
+// [-] 4. CCIP Bridge - Private Beta Multi Token
+// [-] 5. CCIP Bridge - Private Beta NFT Bridge
+// [-] 6. CCIP Bridge - Private Beta DeFi Bridge
+// [-] 7. CCIP Bridge - Private Beta P2P Payments Bridge
+// [-] 8. CCIP Bridge - Private Beta Asset TokenizationBridge
 
 export default function CCIPBridge() {
   const { ethersProvider } = useWallet();
@@ -131,7 +125,7 @@ export default function CCIPBridge() {
         );
         if (!details.senderAddress) return;
         try {
-          console.log("details.senderAddress", details.senderAddress);
+          // console.log("details.senderAddress", details.senderAddress);
           const erc20Balance = await erc20Token.balanceOf(
             details.senderAddress
           );
@@ -175,7 +169,7 @@ export default function CCIPBridge() {
     const getBnMFeeTokens = async () => {
       const availableFeeTokens =
         ccipRouterConfig.getRouterConfig(fromNetwork).feeTokens;
-      console.log("availableFeeTokens", availableFeeTokens);
+      // console.log("availableFeeTokens", availableFeeTokens);
       setFeeTokens(availableFeeTokens);
       if ("ETH" in availableFeeTokens) {
         // console.log('aici 1');
@@ -221,22 +215,22 @@ export default function CCIPBridge() {
           return;
         }
 
-        console.log("updatedDetailsBefore", {
-          details,
-          amount: ethers.utils.parseEther(debouncedAmount.replace(",", ".")),
-        });
+        // console.log("updatedDetailsBefore", {
+        //   details,
+        //   amount: ethers.utils.parseEther(debouncedAmount.replace(",", ".")),
+        // });
 
         const updatedDetails = {
           ...details,
           amount: ethers.utils.parseEther(debouncedAmount.replace(",", ".")),
         };
 
-        console.log("updatedDetails", updatedDetails);
+        // console.log("updatedDetails", updatedDetails);
 
         // TODO GRANT APPROVAL - SUPPORT ALL WHITELISTED TOKENS ON BOTH MAINNET AND TESTNET
         const { fees, message } = await getChainlinkCCIPFee(updatedDetails);
-        console.log("fees", fees);
-        console.log("message", message);
+        // console.log("fees", fees);
+        // console.log("message", message);
         setCcipFees(fees);
         setMessage(message);
       } catch (error) {
@@ -246,12 +240,17 @@ export default function CCIPBridge() {
     getBnMFee();
   }, [fromNetwork, toNetwork, address, details, debouncedAmount, chainId]);
 
-  const [ccipCategories, setCcipCategories] = useState({
-    categories: ['Public Access', 'Private Beta', 'NFT', 'DeFi', 'Payments', 'Assets'],
-    // addons: ['General Access', 'Private Beta', 'ERC721',  'Liqudity', 'P2P'],
-    addons: ['ERC20', 'ERC20', 'ERC721/1155',  'Liqudity', 'P2P', 'Tokenization'],
-    extra: ['ACTIVE','SOON','SOON','SOON','SOON','SOON']
-  })
+  const ccipCategories = {
+    // top
+    topCategories: ['General Access', 'General Access', 'Private Beta'],
+    topAddons: ['Single-Token', 'Multi-Token', 'Multi-Token'],
+    topExtra: ['CCIP ERC20','COMMING SOON','COMMING SOON'],
+    status: ['ACTIVE','',''],
+    // bottom
+    categories: ['General Access', 'Mainnet Private Beta', 'Messages', 'NFT', 'DeFi', 'Random', 'Assets', 'Payments'],
+    addons: ['Multi-Token', 'Multi-Token', 'ERC721/1155', 'Crosschain', 'Liqudity LP', 'Events', 'Tokenization', 'P2P'],
+    extra: ['ERC20/ERC677','ERC20/ERC677','ERC721/ERC1155','Providers','VRF+Keepers','Crosschain', 'Proof of reserve','CCIP'],
+  }
 
   const processCcipCategory = (category: string) => {
     // Implement your logic here to switch between tabs or handle category selection
@@ -265,7 +264,7 @@ export default function CCIPBridge() {
         loop={true}
         style={{
           position: "absolute",
-          height: "1357px",
+          height: "1456px",
           width: "100%",
           margin: "0 auto",
         }}
@@ -299,17 +298,19 @@ export default function CCIPBridge() {
         <h3 className="flex w-full items-center justify-center text-center z-80 text-2xl my-2 text-chainlinkBiscay">
           The era of secure blockchain interoperability has arrived.
         </h3>
-        <section id="ccipCategories" className="sm:flex sm:flex-row justify-center w-full mt-5">
-          {ccipCategories.categories.map((category, index) => (
+        <section id="ccipCategories" className="grid grid-cols-3 justify-items-center sm:flex sm:flex-row sm:justify-items-start items-center justify-center w-full mt-5">
+          {ccipCategories.topCategories.map((topCategory, index) => (
+            <>
             <button
               key={index}
-              onClick={() => processCcipCategory(category)}
-              className="w-28 sm:w-36 rounded-lg px-1 sm:px-4 py-2 mx-2 text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:border-chainlinkBlue focus:ring-opacity-50 transition duration-300 ease-in-out"
+              onClick={() => processCcipCategory(topCategory)}
+              className={`rounded-tl rounded-tr rounded-lg mx-1 bg-chainlinkBiscay text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:border-chainlinkBlue focus:ring-opacity-50 transition duration-300 ease-in-out`}
             >
-              <div className="text-md bg-chainlinkBlue p-1 rounded-tl rounded-tr">{category}</div>
-              <div className="text-sm bg-chainlinkMirage rounded-bl rounded-br">{ccipCategories.addons[index]}</div>
-              <div className="text-xs text-chainlinkBlue mt-1">{ccipCategories.extra[index]}</div>
+              <div className={`hover:opacity-90 rounded-tl rounded-tr text-md ${index === 0 ? 'bg-chainlinkBlue': 'bg-chainlinkBiscay'} rounded-tl rounded-tr w-44 h-10 flex items-center justify-center`}>{topCategory}</div>
+              <div className={`hover:opacity-90 text-sm h-6 bg-chainlinkMirage rounded-bl rounded-br`}>{ccipCategories.topAddons[index]}</div>
+              <div className={`hover:opacity-90 text-sm text-chainlinkPerano`}>{ccipCategories.topExtra[index]}</div>
             </button>
+            </>
           ))}
         </section>
         <div className={`flex w-full max-w-[480px] h-auto mx-auto my-4`}>
@@ -432,6 +433,23 @@ export default function CCIPBridge() {
             {" "} Chainlink Constelation Hackathon
           </Link>
         </div>
+
+        <div className="text-chainlinkZircon p-1 bg-chainlinkBlue flex flex-col items-center justify-center w-80 mt-44 mx-auto">
+          <div className="flex justify-center text-center">More CCIP use cases comming soon <br/> for the Swiss Army Knive Roadmap</div>
+        </div>
+        <section id="ccipCategories" className="grid grid-cols-3 sm:grid-cols-4 gap-1 justify-items-center md:flex md:flex-row md:justify-items-start items-center justify-center w-full mt-5">
+          {ccipCategories.categories.map((category, index) => (
+            <button
+              key={index}
+              onClick={() => processCcipCategory(category)}
+              className="w-28 sm:w-36 rounded-lg px-1 sm:px-4 py-2 mx-2 text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:border-chainlinkBlue focus:ring-opacity-50 transition duration-300 ease-in-out"
+            >
+              <div className="text-md bg-chainlinkBlue p-1 rounded-tl rounded-tr h-14 flex items-center justify-center">{category}</div>
+              <div className="text-sm bg-chainlinkMirage rounded-bl rounded-br">{ccipCategories.addons[index]}</div>
+              <div className="text-xs text-chainlinkBlue mt-1">{ccipCategories.extra[index]}</div>
+            </button>
+          ))}
+        </section>
       </div>
     </section>
   );

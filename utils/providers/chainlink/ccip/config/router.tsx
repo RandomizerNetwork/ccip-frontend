@@ -36,7 +36,7 @@ const ethereumMainnet = {
     LINK: '0x514910771AF9Ca656af840dff83E8264EcF986CA',
   },
   whitelistedTokens: {
-    BnM: '0x94025780a1aB58868D9B2dBBB775f44b32e8E6e5', // BETS Tokens which is the only 1 whitelisted atm for CCIP
+    BnM: '0x94025780a1aB58868D9B2dBBB775f44b32e8E6e5',
   },
 };
 

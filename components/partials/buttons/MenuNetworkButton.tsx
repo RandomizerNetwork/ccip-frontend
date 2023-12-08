@@ -2,22 +2,15 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import useComponentVisible from '@/hooks/useComponentVisible';
-import useWallet from '@/hooks/useWallet';
 import NetworkIcon from '../network/NetworkIcon';
 import RotatingArrow from '@/components/header/partials/RotatingArrow';
 import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers5/react';
 import { liveChains } from '@/utils/providers/Web3Modal';
 import changeNetwork from '@/utils/helpers/changeNetwork';
-import getChainID from '@/utils/providers/chainlink/ccip/config/chains';
-import useGlobalState from '@/store/globalState';
 
 export default function MenuNetworkButton() {
   const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider()
-  
-  const [fromNetwork] = useGlobalState("fromNetwork");
-
-  console.log('walletProvider', walletProvider)
 
   const { refs, active, setActive, handleButtonClick } = useComponentVisible<
     HTMLButtonElement,

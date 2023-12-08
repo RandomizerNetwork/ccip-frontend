@@ -41,13 +41,13 @@ const getChainlinkCCIPFee = async (
         amount,
         feeTokenAddress,
       } = details;
-      console.log(`Transferring tokens...`);
-      console.log(`Source Chain: ${sourceChain}`);
-      console.log(`Destination Chain: ${destinationChain}`);
-      console.log(`Destination Account: ${destinationAccount}`);
-      console.log(`Token Address: ${tokenAddress}`);
-      console.log(`Amount: ${amount.toString()}`);
-      console.log(`Fee Token Address: ${feeTokenAddress}`);
+      // console.log(`Transferring tokens...`);
+      // console.log(`Source Chain: ${sourceChain}`);
+      // console.log(`Destination Chain: ${destinationChain}`);
+      // console.log(`Destination Account: ${destinationAccount}`);
+      // console.log(`Token Address: ${tokenAddress}`);
+      // console.log(`Amount: ${amount.toString()}`);
+      // console.log(`Fee Token Address: ${feeTokenAddress}`);
 
       const fees: string = '0';
       let message: Message = {
