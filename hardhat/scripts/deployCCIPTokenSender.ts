@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import hre from 'hardhat'
 import getCCIPConfig from "../utils/getCCIPConfig";
 import { encodeBytes32String } from "ethers";
-import createDeterministicContract, { sleep } from "../utils/deterministicContract";
+import createDeterministicContract, { create2Address, encoder, sleep } from "../utils/deterministicContract";
 import { CCIPTokenSender__factory } from "../typechain-types";
 
 async function main() {
@@ -35,19 +35,24 @@ async function main() {
 
   // const myContractBytecode = CCIPTokenSender__factory.bytecode;
   const leadingZeroes = 3; // Number of leading zeroes desired in the address
-  const deterministicSalt = await createDeterministicContract(await deterministicFactory.getAddress(), bytecode, owner.address, leadingZeroes);
+  const initCode = bytecode + encoder(["address", "address"], [router, token]);
+  const deterministicSalt = await createDeterministicContract(await deterministicFactory.getAddress(), initCode, owner.address, leadingZeroes);
   console.log('deterministicSalt', deterministicSalt)
 
+
+  const create2Addr = create2Address(await deterministicFactory.getAddress(), deterministicSalt, initCode);
+  console.log("precomputed address:", create2Addr);
+
   // Calculate the address where MyContract will be deployed
-  const predictedAddress = await deterministicFactory.getDeploymentAddress(deterministicSalt, bytecode);
-  console.log(`Predicted MyContract address: ${predictedAddress}`);
+  // const predictedAddress = await deterministicFactory.getDeploymentAddress(deterministicSalt, bytecode);
+  // console.log(`Predicted MyContract address: ${predictedAddress}`);
 
   // Deploy MyContract using the Factory
   // await deterministicFactory.deploy(deterministicSalt, myContractBytecode);
   // console.log(`ccipTokenSender deployed to address: ${predictedAddress}`);
 
   // Deploy the contract using the factory
-  const deployTx = await deterministicFactory.deploy(deterministicSalt, bytecode);
+  const deployTx = await deterministicFactory.deploy(deterministicSalt, initCode);
   await deployTx.wait();
 }
 
