@@ -1,4 +1,4 @@
-import { utils, providers } from 'ethers';
+import { ethers } from 'ethers';
 import {
   ContractCallContext,
   ContractCallResults,
@@ -11,12 +11,12 @@ import formatUnits from '@/utils/formatters/formatUnits';
 
 const multicallCcipTokensSymbolDecimals = async (
   activeAccount: string,
-  ethersProvider: providers.JsonRpcProvider | providers.WebSocketProvider
+  ethersProvider: ethers.providers.JsonRpcProvider | ethers.providers.WebSocketProvider
 ) => {
   try {
     const { chainId } = await ethersProvider.getNetwork();
     console.log('hexValueChainID', chainId);
-    let hexValue = utils.hexlify(chainId);
+    let hexValue = ethers.utils.hexlify(chainId);
 
     // Remove leading zero if present
     if (hexValue.length === 8 && hexValue.startsWith('0x0')) {
