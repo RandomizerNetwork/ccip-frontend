@@ -25,20 +25,15 @@ async function main() {
   console.log(`DeterministicFactory deployed to: ${await deployment.getAddress()}`);
 
   // const deterministicFactory = await ethers.getContractAt("DeterministicFactory", "0x974c5169327eFFe61051E0Bf6fA866DCcAc8141f")
-
-  // const factoryAddress = "0x974c5169327eFFe61051E0Bf6fA866DCcAc8141f"; // Deployed factory address
-  // const factory = await ethers.getContractAt("DeterministicFactory", factoryAddress, owner);
   
   // Get the bytecode of MyContract
   const contractFactory = await ethers.getContractFactory("CCIPTokenSender");
   const bytecode = contractFactory.bytecode;
 
-  // const myContractBytecode = CCIPTokenSender__factory.bytecode;
   const leadingZeroes = 3; // Number of leading zeroes desired in the address
   const initCode = bytecode + encoder(["address", "address"], [router, token]);
   const deterministicSalt = await createDeterministicContract(await deterministicFactory.getAddress(), initCode, owner.address, leadingZeroes);
   console.log('deterministicSalt', deterministicSalt)
-
 
   const create2Addr = create2Address(await deterministicFactory.getAddress(), deterministicSalt, initCode);
   console.log("precomputed address:", create2Addr);

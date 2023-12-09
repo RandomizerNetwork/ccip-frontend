@@ -16,7 +16,7 @@ export const create2Address = (factoryAddress: any, saltHex: any, initCode: any)
     const create2Addr = ethers.utils.getCreate2Address(factoryAddress, saltHex, ethers.utils.keccak256(initCode));
     return create2Addr;
 }
-
+ 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const createDeterministicContract = async (_factoryAddress: string, _bytecode: string, _msgSender: string, _leadingZeros: number): Promise<string> => {
@@ -48,6 +48,53 @@ const createDeterministicContract = async (_factoryAddress: string, _bytecode: s
 
   process.removeAllListeners();
   return salt
+};
+
+const createDeterministicContractV2 = async (_factoryAddress: string, _bytecode: string, _msgSender: string, _zeroesThreshold:number, _preferLeadingZeroes = true): Promise<string> => {
+    console.time("DeterministicContractCreation");
+    let bestSalt = '';
+    let bestZeroesCount = 0;
+    let i = 0;
+
+    while (true) {
+        // Generate 12 random bytes to complete 32 bytes when combined with the sender's address
+        const saltBytes = ethers.utils.randomBytes(12);
+        const msgSenderBytes = ethers.utils.arrayify(_msgSender);
+        const fullSaltBytes = ethers.utils.concat([msgSenderBytes, saltBytes]);
+        const fullSaltHex = ethers.utils.hexlify(fullSaltBytes);
+
+        // Ensuring the salt is exactly 32 bytes long
+        if (fullSaltBytes.length !== 32) {
+            throw new Error("Salt must be exactly 32 bytes");
+        }
+
+        const initCodeHash = ethers.utils.keccak256(_bytecode);
+        const addr = ethers.utils.getCreate2Address(_factoryAddress, fullSaltHex, initCodeHash);
+
+        let zeroesCount = (addr.match(/0/g) || []).length;
+
+        if (_preferLeadingZeroes) {
+            const leadingZeroesMatch = addr.slice(2).match(/^0*/);
+            const leadingZeroesCount = leadingZeroesMatch ? leadingZeroesMatch[0].length : 0;
+            if (leadingZeroesCount > bestZeroesCount) {
+                bestSalt = fullSaltHex;
+                bestZeroesCount = leadingZeroesCount;
+            }
+        } else if (zeroesCount > bestZeroesCount) {
+            bestSalt = fullSaltHex;
+            bestZeroesCount = zeroesCount;
+        }
+
+        if (bestZeroesCount >= _zeroesThreshold) {
+            console.log(`Address with ${bestZeroesCount} zeroes (including leading) found: ${addr}`);
+            console.log(`Salt: ${bestSalt}`);
+            console.timeEnd("DeterministicContractCreation");
+            return bestSalt;
+        }
+
+        i++;
+        if (i % 1000 === 0) console.log(`Attempts: ${i}`);
+    }
 };
 
 export default createDeterministicContract;
