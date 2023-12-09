@@ -1,7 +1,7 @@
 import { createGlobalState } from 'react-hooks-global-state';
 import { BigNumber } from 'ethers';
 import { IS_LOCAL } from '@/constants/networks';
-import { GlobalTypes } from '@/utils/types/store';
+import { CCIPMenuEnum, GlobalTypes } from '@/utils/types/store';
 
 const { useGlobalState } = createGlobalState<GlobalTypes>({
   isLoading: true,
@@ -16,6 +16,7 @@ const { useGlobalState } = createGlobalState<GlobalTypes>({
     link: '0',
     bnm: '0',
   },
+  ccipMenu: IS_LOCAL ? CCIPMenuEnum.GeneralAccess : CCIPMenuEnum.PrivateBeta,
   // CCIP ROUTES
   fromNetwork: IS_LOCAL ? 'ethereumSepolia' : 'ethereumMainnet',
   toNetwork: IS_LOCAL ? 'polygonMumbai' : 'polygonMainnet',

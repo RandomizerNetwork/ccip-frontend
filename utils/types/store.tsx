@@ -8,6 +8,12 @@ export type CCIPMessage = {
   feeTokenAddress: string;
 };
 
+export enum CCIPMenuEnum {
+  GeneralAccess = "General Access",
+  PrivateBeta = "Private Beta",
+  GApb = "GA + PB", // General Access + Private Beta
+}
+
 export type GlobalTypes = {
   isLoading: boolean;
   sideNavMenuOpen: boolean;
@@ -16,4 +22,5 @@ export type GlobalTypes = {
   fromNetwork: string;
   toNetwork: string;
   ccipStore: CCIPMessage;
+  ccipMenu: CCIPMenuEnum;
 };

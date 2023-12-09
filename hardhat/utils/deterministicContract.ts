@@ -19,38 +19,7 @@ export const create2Address = (factoryAddress: any, saltHex: any, initCode: any)
  
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const createDeterministicContract = async (_factoryAddress: string, _bytecode: string, _msgSender: string, _leadingZeros: number): Promise<string> => {
-  console.time();
-  let salt;
-  let i = 0;
-  while (!salt) {
-    const saltBytes = ethers.utils.randomBytes(12);
-    const msgSenderBytes = ethers.utils.arrayify(_msgSender);
-    const fullSaltBytes = ethers.utils.concat([msgSenderBytes, saltBytes]);
-    const saltHex = saltBytes.toString();
-    const bytecodeBytes = ethers.utils.arrayify(_bytecode);
-    const initCodeHash = ethers.utils.keccak256(bytecodeBytes);
-    const addr = ethers.utils.getCreate2Address(
-      _factoryAddress,
-      fullSaltBytes,
-      initCodeHash
-    );
-    console.log("adddr", addr, i);
-    if (addr.slice(2, 2 + _leadingZeros) === "0".repeat(_leadingZeros)) {
-      salt = ethers.utils.hexlify(fullSaltBytes);
-      console.log(`Salt: ${salt}, ${saltBytes}, ${saltHex} Address: ${addr}`);
-      console.timeEnd();
-      return salt;
-      // break;
-    }
-    i++;
-  }
-
-  process.removeAllListeners();
-  return salt
-};
-
-const createDeterministicContractV2 = async (_factoryAddress: string, _bytecode: string, _msgSender: string, _zeroesThreshold:number, _preferLeadingZeroes = true): Promise<string> => {
+export const createDeterministicContractV2 = async (_factoryAddress: string, _bytecode: string, _msgSender: string, _zeroesThreshold:number, _preferLeadingZeroes = true): Promise<string> => {
     console.time("DeterministicContractCreation");
     let bestSalt = '';
     let bestZeroesCount = 0;
@@ -97,4 +66,36 @@ const createDeterministicContractV2 = async (_factoryAddress: string, _bytecode:
     }
 };
 
+
+const createDeterministicContract = async (_factoryAddress: string, _bytecode: string, _msgSender: string, _leadingZeros: number): Promise<string> => {
+    console.time();
+    let salt;
+    let i = 0;
+    while (!salt) {
+      const saltBytes = ethers.utils.randomBytes(12);
+      const msgSenderBytes = ethers.utils.arrayify(_msgSender);
+      const fullSaltBytes = ethers.utils.concat([msgSenderBytes, saltBytes]);
+      const saltHex = saltBytes.toString();
+      const bytecodeBytes = ethers.utils.arrayify(_bytecode);
+      const initCodeHash = ethers.utils.keccak256(bytecodeBytes);
+      const addr = ethers.utils.getCreate2Address(
+        _factoryAddress,
+        fullSaltBytes,
+        initCodeHash
+      );
+      console.log("adddr", addr, i);
+      if (addr.slice(2, 2 + _leadingZeros) === "0".repeat(_leadingZeros)) {
+        salt = ethers.utils.hexlify(fullSaltBytes);
+        console.log(`Salt: ${salt}, ${saltBytes}, ${saltHex} Address: ${addr}`);
+        console.timeEnd();
+        return salt;
+        // break;
+      }
+      i++;
+    }
+  
+    process.removeAllListeners();
+    return salt
+  };
+  
 export default createDeterministicContract;

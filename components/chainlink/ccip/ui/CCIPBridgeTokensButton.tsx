@@ -16,6 +16,8 @@ import routerAbi from '@/utils/providers/chainlink/ccip/abi/Router.json';
 import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers5/react';
 import getChainsByID from '@/utils/providers/chainlink/ccip/config/chainsByID';
 import changeNetwork from '@/utils/helpers/changeNetwork';
+import useGlobalState from '@/store/globalState';
+import { CCIPMenuEnum } from '@/utils/types/store';
 
 interface IBridgeButton {
   fromNetwork: string;
@@ -43,6 +45,8 @@ export default function CCIPBridgeTokensButton({
   const { chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider()
   
+  const [ccipMenu] = useGlobalState('ccipMenu');
+
   useEffect(() => {
     setToNetwork(ccipRouterConfig.getRouterConfig(fromNetwork).lanes[0]);
   }, [fromNetwork, setToNetwork]);
@@ -365,31 +369,62 @@ export default function CCIPBridgeTokensButton({
       // if (!ethersProvider) return;
       const signer = ethersProvider.getSigner();
       if (!signer) return;
-      const sourceRouter = new ethers.Contract(
-        sourceRouterAddress,
-        routerAbi,
-        signer
-      );
 
-      let sendTx;
-      let receiptTx;
-      if (!details.feeTokenAddress) {
-        sendTx = await sourceRouter.ccipSend(
-          destinationChainSelector,
-          message,
-          {
-            value: parsedFee.toString(),
-          }
-        ); // fees are send as value since we are paying the fees in native
-        receiptTx = await sendTx.wait(); // wait for the transaction to be mined
-      } else {
-        sendTx = await sourceRouter.ccipSend(destinationChainSelector, message);
-        receiptTx = await sendTx.wait(); // wait for the transaction to be mined
+      if(ccipMenu === CCIPMenuEnum.GeneralAccess) {
+        const sourceRouter = new ethers.Contract(
+          sourceRouterAddress,
+          routerAbi,
+          signer
+        );
+  
+        let sendTx;
+        let receiptTx;
+        if (!details.feeTokenAddress) {
+          sendTx = await sourceRouter.ccipSend(
+            destinationChainSelector,
+            message,
+            {
+              value: parsedFee.toString(),
+            }
+          ); // fees are send as value since we are paying the fees in native
+          receiptTx = await sendTx.wait(); // wait for the transaction to be mined
+        } else {
+          sendTx = await sourceRouter.ccipSend(destinationChainSelector, message);
+          receiptTx = await sendTx.wait(); // wait for the transaction to be mined
+        }
+        console.log('sendTx', sendTx);
+        console.log('receiptTx', receiptTx);
+  
+        triggerToast('SUCCESS', `Succesfully sent ${details.feeTokenSymbol}`);
       }
-      console.log('sendTx', sendTx);
-      console.log('receiptTx', receiptTx);
 
-      triggerToast('SUCCESS', `Succesfully sent ${details.feeTokenSymbol}`);
+      if(ccipMenu === CCIPMenuEnum.PrivateBeta) {
+        const sourceRouter = new ethers.Contract(
+          sourceRouterAddress,
+          routerAbi,
+          signer
+        );
+  
+        let sendTx;
+        let receiptTx;
+        if (!details.feeTokenAddress) {
+          sendTx = await sourceRouter.ccipSend(
+            destinationChainSelector,
+            message,
+            {
+              value: parsedFee.toString(),
+            }
+          ); // fees are send as value since we are paying the fees in native
+          receiptTx = await sendTx.wait(); // wait for the transaction to be mined
+        } else {
+          sendTx = await sourceRouter.ccipSend(destinationChainSelector, message);
+          receiptTx = await sendTx.wait(); // wait for the transaction to be mined
+        }
+        console.log('sendTx', sendTx);
+        console.log('receiptTx', receiptTx);
+  
+        triggerToast('SUCCESS', `Succesfully sent ${details.feeTokenSymbol}`);
+      }
 
       // const testCCIPTransferTokens = await CCIPTransferTokens(
       //   details,
