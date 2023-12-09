@@ -78,6 +78,8 @@ export default function CCIPBridgeTokensButton({
       // Check BnM allowance
       // if (Number(amount) === 0) return;
       if (!ethersProvider) return;
+      const signer = ethersProvider.getSigner();
+      if (!signer) return;
       const erc20 = new ethers.Contract(
         details.tokenAddress,
         erc20Abi,
@@ -103,7 +105,7 @@ export default function CCIPBridgeTokensButton({
       }
       setBnMApproved(false);
     } catch (error) {
-      console.log('error in checkBnMApproval', error);
+      // console.log('error in checkBnMApproval', error);
       setBnMApproved(false);
       // triggerToast('ERROR');
     }
@@ -202,7 +204,7 @@ export default function CCIPBridgeTokensButton({
         setFeeTokenApproved(true);
       }
     } catch (error) {
-      console.log('error in checkBnMApproval', error);
+      // console.log('error in checkBnMApproval', error);
       setFeeTokenApproved(false);
       // triggerToast('ERROR');
     }
@@ -334,6 +336,7 @@ export default function CCIPBridgeTokensButton({
     checkFeeTokenApproval();
   }, [
     details,
+    chainId,
     ethersProvider,
     address,
     bnmApproved,
@@ -426,10 +429,6 @@ export default function CCIPBridgeTokensButton({
     }
   };
 
-  // console.log('details', details);
-  // console.log('bnmApproved', bnmApproved);
-  // console.log('feeTokenApproved', feeTokenApproved);
-  // APPROVAL
   return (
     <>
       <div className="flex w-full">

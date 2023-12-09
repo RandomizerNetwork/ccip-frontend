@@ -21,7 +21,8 @@ import erc20Abi from "@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json";
 import formatEtherToLocaleString from "@/utils/formatters/formatEther";
 import { useWeb3ModalAccount } from "@web3modal/ethers5/react";
 import CCIPTokenIcon from "./ui/CCIPTokenIcon";
-
+import RotatingArrow from "@/components/header/partials/RotatingArrow";
+import { v4 as uuidv4 } from 'uuid';
 // TODO CCIP UI
 // [x] 1. FEE TOKENS MINI-MODAL
 // [X] 2. BnM ON EVERY TESTNET CHAIN
@@ -39,9 +40,14 @@ import CCIPTokenIcon from "./ui/CCIPTokenIcon";
 // [x] 12. add debounce for token value input
 // [x] 13. Testnets and mainnet works on 7 chains with 7 tokens!
 // [x] 14. create a modal where players can swap any token and purchase tickets directly on a single chain or crosschain with CCIP.
-// [] 15. CREATE EIP712 CCIP TX
-// [] 16. CCIP notifications with token cross chain bridging results
+// [] 15. GET MULTICALL SUPPORTED TOKENS + SELECTION MODAL
+// [] 16. CCIP notifications with cross chain bridging results
 // [] 17. Add CCIP Error handling when the lanes are overused
+// [] 18. Add messages to destinationChain contract method call
+// [] 19. Multicall approve up to 5 tokens in a single CCIP TX
+  // [] 19.1 Tokens Modal => SupportedTokens -> Multicall (Decimals + Symbol + Logo)
+  // [] 19.2 Deploy Helper Contract to allow up to approve multiple tokens and even pay the CCIP Fee and also add EIP712 for a better user experience
+  // [] 19.3 Simplify the UI 
 
 // TODO
 // [x] 1. CCIP Bridge - General Access Single Token
@@ -167,8 +173,7 @@ export default function CCIPBridge() {
 
   useEffect(() => {
     const getBnMFeeTokens = async () => {
-      const availableFeeTokens =
-        ccipRouterConfig.getRouterConfig(fromNetwork).feeTokens;
+      const availableFeeTokens = ccipRouterConfig.getRouterConfig(fromNetwork).feeTokens;
       // console.log("availableFeeTokens", availableFeeTokens);
       setFeeTokens(availableFeeTokens);
       if ("ETH" in availableFeeTokens) {
@@ -248,8 +253,8 @@ export default function CCIPBridge() {
     status: ['ACTIVE','',''],
     // bottom
     categories: ['General Access', 'Mainnet Private Beta', 'Messages', 'NFT', 'DeFi', 'Random', 'Assets', 'Payments'],
-    addons: ['Multi-Token', 'Multi-Token', 'ERC721/1155', 'Crosschain', 'Liqudity LP', 'Events', 'Tokenization', 'P2P'],
-    extra: ['ERC20/ERC677','ERC20/ERC677','ERC721/ERC1155','Providers','VRF+Keepers','Crosschain', 'Proof of reserve','CCIP'],
+    addons: ['Multi-Token', 'Multi-Token', 'Contract-Call', 'Crosschain', 'Liqudity LP', 'Events', 'Tokenization', 'P2P'],
+    extra: ['ERC20/ERC677','ERC20/ERC677','CCIP','ERC721/ERC1155','VRF+Keepers','Crosschain', 'Proof of reserve','CCIP'],
   }
 
   const processCcipCategory = (category: string) => {
@@ -298,19 +303,17 @@ export default function CCIPBridge() {
         <h3 className="flex w-full items-center justify-center text-center z-80 text-2xl my-2 text-chainlinkBiscay">
           The era of secure blockchain interoperability has arrived.
         </h3>
-        <section id="ccipCategories" className="grid grid-cols-3 justify-items-center sm:flex sm:flex-row sm:justify-items-start items-center justify-center w-full mt-5">
+        <section id="ccipCategories" className="grid grid-cols-3 gap-1 justify-items-center sm:flex sm:flex-row sm:justify-items-start items-center justify-center w-full mt-5">
           {ccipCategories.topCategories.map((topCategory, index) => (
-            <>
             <button
-              key={index}
+              key={uuidv4()}
               onClick={() => processCcipCategory(topCategory)}
               className={`rounded-tl rounded-tr rounded-lg mx-1 bg-chainlinkBiscay text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:border-chainlinkBlue focus:ring-opacity-50 transition duration-300 ease-in-out`}
             >
-              <div className={`hover:opacity-90 rounded-tl rounded-tr text-md ${index === 0 ? 'bg-chainlinkBlue': 'bg-chainlinkBiscay'} rounded-tl rounded-tr w-44 h-10 flex items-center justify-center`}>{topCategory}</div>
-              <div className={`hover:opacity-90 text-sm h-6 bg-chainlinkMirage rounded-bl rounded-br`}>{ccipCategories.topAddons[index]}</div>
-              <div className={`hover:opacity-90 text-sm text-chainlinkPerano`}>{ccipCategories.topExtra[index]}</div>
+              <div className={`hover:opacity-90 text-md h-10 flex justify-center items-center ${index === 0 ? 'bg-chainlinkBlue': 'bg-chainlinkBiscay'} rounded-tl rounded-tr w-32 sm:w-44`}>{topCategory}</div>
+              <div className={`hover:opacity-90 text-sm h-9 flex justify-center items-center bg-chainlinkMirage`}>{ccipCategories.topAddons[index]}</div>
+              <div className={`hover:opacity-90 text-sm h-8 flex justify-center items-center text-chainlinkPerano`}>{ccipCategories.topExtra[index]}</div>
             </button>
-            </>
           ))}
         </section>
         <div className={`flex w-full max-w-[480px] h-auto mx-auto my-4`}>
@@ -358,7 +361,7 @@ export default function CCIPBridge() {
               <div>Amount</div>
               <div className="flex flex-row">
                 <div className="mr-2">{selectedTokenBalance} BnM</div>
-                {/* <CCIPTokenIcon /> */}
+                <CCIPTokenIcon />
               </div>
             </div>
 
@@ -370,12 +373,13 @@ export default function CCIPBridge() {
                 value={amount}
                 onChange={(e) => updateAmount(e.target.value)}
               />
-              <button className="w-1/3 flex flex-row justify-end">
-                <span className="mr-2">
+              <button className="w-1/3 flex flex-row justify-center items-center">
+                <RotatingArrow active={true} pixels={18}/>
+                <span className="mx-2"> BnM </span>
+                {/* <span className="mr-2">
                   {" "}
                   <CCIPTokenIcon />{" "}
-                </span>
-                <span className="mr-2"> BnM </span>
+                </span> */}
               </button>
               <button
                 className="w-1/4 bg-chainlinkBlue hover:bg-opacity-80 border-r-lg"
@@ -440,7 +444,7 @@ export default function CCIPBridge() {
         <section id="ccipCategories" className="grid grid-cols-3 sm:grid-cols-4 gap-1 justify-items-center md:flex md:flex-row md:justify-items-start items-center justify-center w-full mt-5">
           {ccipCategories.categories.map((category, index) => (
             <button
-              key={index}
+              key={uuidv4()}
               onClick={() => processCcipCategory(category)}
               className="w-28 sm:w-36 rounded-lg px-1 sm:px-4 py-2 mx-2 text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:border-chainlinkBlue focus:ring-opacity-50 transition duration-300 ease-in-out"
             >
