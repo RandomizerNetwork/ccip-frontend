@@ -64,7 +64,7 @@ export default function MenuNetworkButton() {
       {active && (
         <div
           ref={refs[1]}
-          className="text-white fixed w-9/12 sm:w-64 mt-14 ml-2 right-0 bg-chainlinkBiscay rounded-lg"
+          className="text-white fixed w-9/12 sm:w-64 mt-14 ml-2 right-0 bg-chainlinkMirage rounded-lg"
         >
           {liveChains.length > 1 && (
             <div className="px-2 py-1 bg-chainlinkBlue rounded-t-lg border-b border-chainlinkZircon">

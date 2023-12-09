@@ -429,19 +429,22 @@ export default function CCIPBridge() {
         </div>
 
         <div className="flex justify-center w-full text-chainlinkMirage">
-          Built with 💜 by {" "} 
+          Built with 💜 for the {" "} 
           <div className="ml-1">
-            <Link target="_blank" href="https://www.randomizer.network/" className="text-chainlinkBlue">
-              {" "}
-              randomizer.network 
-            </Link>
-          </div>
-        </div>
-        <div className="flex flex-row justify-center w-full text-chainlinkMirage">
-          <div className="flex justify-center mr-1"> for the </div>
           <Link target="_blank" href="https://chain.link/hackathon" className="flex justify-center text-chainlinkBlue">
             {" "} Chainlink Constelation Hackathon
           </Link>
+          </div>
+        </div>
+        <div className="flex flex-row justify-center w-full text-chainlinkMirage">
+          <div className="flex justify-center"> by </div>
+          <Link target="_blank" href="https://www.github.com/Liberalite" className="text-chainlinkBlue mx-1">
+              Liberalite
+          </Link>
+          <div className="flex justify-center mr-1"> from </div>
+          <Link target="_blank" href="https://www.randomizer.network/" className="text-chainlinkBlue">
+              randomizer.network 
+            </Link>
         </div>
 
         <div className="text-chainlinkZircon p-1 bg-chainlinkBlue flex flex-col items-center justify-center w-80 mt-44 mx-auto">

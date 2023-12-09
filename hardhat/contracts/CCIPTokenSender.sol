@@ -36,6 +36,10 @@ contract CCIPTokenSender {
         return ccipRouter.getFee(destinationChainSelector, message);
     }
 
+    function getSupportedTokens(uint64 destinationChainSelector) external view returns (address[] memory supportedTokens) {
+        return ccipRouter.getSupportedTokens(destinationChainSelector);
+    }
+
     /** @notice Validates the message content, forwards it to the CCIP router and returns the result.
      *  @param destinationChainSelector The destination chainSelector
      *  @param message The cross-chain CCIP message including data and/or tokens

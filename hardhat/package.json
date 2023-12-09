@@ -6,13 +6,16 @@
     "build": "npx hardhat compile",
     "test": "npx hardhat compile && npx hardhat test test/hardhat/*",
     "fork": "npx hardhat node",
+    "deployDeterministicFactory": "npx hardhat compile && npx hardhat run scripts/deployDeterministicFactory.ts --network ethereumSepolia",
     "deployCCIPTokenSender": "npx hardhat compile && npx hardhat run scripts/deployCCIPTokenSender.ts --network ethereumSepolia",
     "verifyFactory": "npx hardhat verify 0x974c5169327eFFe61051E0Bf6fA866DCcAc8141f --network ethereumSepolia"
   },
   "dependencies": {
     "@chainlink/contracts-ccip": "^1.2.1",
+    "@types/js-yaml": "^4.0.9",
     "dotenv": "^16.3.1",
-    "ethers-v5": "npm:ethers@5.7.2"
+    "ethers-v5": "npm:ethers@5.7.2",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",

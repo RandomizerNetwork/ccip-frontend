@@ -73,7 +73,7 @@ export default function MenuWalletButton(): ReactElement {
         {address && active && (
           <div
             ref={refs[1]}
-            className="fixed w-9/12 sm:w-64 mt-14 right-0 bg-chainlinkBiscay rounded-lg"
+            className="fixed w-9/12 sm:w-64 mt-14 right-0 bg-chainlinkMirage rounded-lg"
           >
             <div className="flex fle-col mt-3 px-3 text-white justify-between">
               <div className="flex flex-row flex-start p-1">

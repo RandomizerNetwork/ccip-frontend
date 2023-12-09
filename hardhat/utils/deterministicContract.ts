@@ -16,7 +16,7 @@ export const create2Address = (factoryAddress: any, saltHex: any, initCode: any)
     const create2Addr = ethers.utils.getCreate2Address(factoryAddress, saltHex, ethers.utils.keccak256(initCode));
     return create2Addr;
 }
- 
+
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export const createDeterministicContractV2 = async (_factoryAddress: string, _bytecode: string, _msgSender: string, _zeroesThreshold:number, _preferLeadingZeroes = true): Promise<string> => {
@@ -65,7 +65,6 @@ export const createDeterministicContractV2 = async (_factoryAddress: string, _by
         if (i % 1000 === 0) console.log(`Attempts: ${i}`);
     }
 };
-
 
 const createDeterministicContract = async (_factoryAddress: string, _bytecode: string, _msgSender: string, _leadingZeros: number): Promise<string> => {
     console.time();

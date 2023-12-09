@@ -10,15 +10,14 @@ async function main() {
   const [owner] = await ethers.getSigners();
   console.log('network', network);
   console.log('owner', owner.address);
-  // return
 
   const getConfig = getCCIPConfig.getRouterConfig(network)
-  // console.log('getConfig', getConfig)
-  
-  const router = getConfig.address
-  const token = getConfig.whitelistedTokens.BnM
-  console.log('router', router)
-  console.log('token', token)
+  console.log('getConfig', getConfig)
+
+  const ccipRouter = getConfig.address
+  const ccipWhitelistedToken = getConfig.whitelistedTokens.BnM
+  console.log('ccipRouter', ccipRouter)
+  console.log('whitelistedCCIPToken', ccipWhitelistedToken)
 
   const deterministicFactory = await ethers.deployContract("DeterministicFactory")
   const deployment = await deterministicFactory.waitForDeployment();
@@ -31,7 +30,7 @@ async function main() {
   const bytecode = contractFactory.bytecode;
 
   const leadingZeroes = 3; // Number of leading zeroes desired in the address
-  const initCode = bytecode + encoder(["address", "address"], [router, token]);
+  const initCode = bytecode + encoder(["address", "address"], [ccipRouter, ccipWhitelistedToken]);
   const deterministicSalt = await createDeterministicContract(await deterministicFactory.getAddress(), initCode, owner.address, leadingZeroes);
   console.log('deterministicSalt', deterministicSalt)
 

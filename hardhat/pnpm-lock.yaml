@@ -8,12 +8,18 @@ dependencies:
   '@chainlink/contracts-ccip':
     specifier: ^1.2.1
     version: 1.2.1(ethers@6.9.0)
+  '@types/js-yaml':
+    specifier: ^4.0.9
+    version: 4.0.9
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
   ethers-v5:
     specifier: npm:ethers@5.7.2
     version: /ethers@5.7.2
+  js-yaml:
+    specifier: ^4.1.0
+    version: 4.1.0
 
 devDependencies:
   '@nomicfoundation/hardhat-chai-matchers':
@@ -1118,6 +1124,10 @@ packages:
       '@types/node': 20.10.4
     dev: true
 
+  /@types/js-yaml@4.0.9:
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
+    dev: false
+
   /@types/lru-cache@5.1.1:
     resolution: {integrity: sha512-ssE3Vlrys7sdIzs5LOxCzTVMsU7i9oa/IaW92wF32JFb3CVczqOkru2xspuKczHEbG3nvmPY7IFqVmGGHdNbYw==}
     dev: true
@@ -1316,7 +1326,6 @@ packages:
 
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
-    dev: true
 
   /array-back@3.1.0:
     resolution: {integrity: sha512-TkuxA4UCOvxuDK6NZYXCalszEzj+TLszyASooky+i742l9TqsOdYCMJJupxRic61hwquNtppB3hgcuq9SVSH1Q==}
@@ -2725,7 +2734,6 @@ packages:
     hasBin: true
     dependencies:
       argparse: 2.0.1
-    dev: true
 
   /json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
