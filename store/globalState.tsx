@@ -17,6 +17,7 @@ const { useGlobalState } = createGlobalState<GlobalTypes>({
     bnm: '0',
   },
   ccipMenu: IS_LOCAL ? CCIPMenuEnum.GeneralAccess : CCIPMenuEnum.PrivateBeta,
+  receiverAddress: '',
   // CCIP ROUTES
   fromNetwork: IS_LOCAL ? 'ethereumSepolia' : 'ethereumMainnet',
   toNetwork: IS_LOCAL ? 'polygonMumbai' : 'polygonMainnet',

@@ -15,7 +15,7 @@ const multicallBalanceProvider = async (
 ) => {
   try {
     const { chainId } = await ethersProvider.getNetwork();
-    console.log('hexValueChainID', chainId);
+    // console.log('hexValueChainID', chainId);
     let hexValue = utils.hexlify(chainId);
 
     // Remove leading zero if present
@@ -23,9 +23,9 @@ const multicallBalanceProvider = async (
       hexValue = `0x${hexValue.slice(3)}`;
     }
 
-    console.log('hexValue', hexValue);
+    // console.log('hexValue', hexValue);
     const filteredNativeAssets = filterNativeAssets(hexValue);
-    console.log('filteredNativeAssets', filteredNativeAssets);
+    // console.log('filteredNativeAssets', filteredNativeAssets);
     const multicall = new Multicall({ tryAggregate: true, ethersProvider });
     const contractCallContext: ContractCallContext[] = [
       // PUBLIC VARIABLES

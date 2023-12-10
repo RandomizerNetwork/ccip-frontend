@@ -5,7 +5,7 @@ import logoMATIC from '@/public/images/tokens/polygon-matic.svg';
 
 const getChainTokens = (chainID: string) => {
   let chainTokens;
-  console.log('chainIDchainID', chainID);
+  // console.log('chainIDchainID', chainID);
   switch (chainID) {
     case '0x1': // 'ethereumMainnet':
       chainTokens = {

@@ -23,4 +23,5 @@ export type GlobalTypes = {
   toNetwork: string;
   ccipStore: CCIPMessage;
   ccipMenu: CCIPMenuEnum;
+  receiverAddress: string | `0x${string}` | undefined;
 };

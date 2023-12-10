@@ -24,12 +24,7 @@ import CCIPTokenIcon from "./ui/CCIPTokenIcon";
 import RotatingArrow from "@/components/header/partials/RotatingArrow";
 import { v4 as uuidv4 } from 'uuid';
 import { CCIPMenuEnum } from "@/utils/types/store";
-import {
-  FaRegEye,
-  FaRegEyeSlash
-} from "react-icons/fa";
-
-import { getAddress } from '@ethersproject/address';
+import CCIPOptionalReceiverAddress from "./ui/CCIPOptionalReceiverAddress";
 
 // TODO CCIP UI
 // [x] 1. FEE TOKENS MINI-MODAL
@@ -64,8 +59,8 @@ import { getAddress } from '@ethersproject/address';
 
 // TODO
 // [x] 1. CCIP Bridge - General Access Single Token
-// [x] 2. CCIP Bridge - General Access Multi Token
-// [-] 3. CCIP Bridge - Private Beta Single Token
+// [-] 2. CCIP Bridge - General Access Multi Token
+// [x] 3. CCIP Bridge - Private Beta Single Token
 // [-] 4. CCIP Bridge - Private Beta Multi Token
 // [-] 5. CCIP Bridge - Private Beta NFT Bridge
 // [-] 6. CCIP Bridge - Private Beta DeFi Bridge
@@ -78,8 +73,9 @@ export default function CCIPBridge() {
   const { address, chainId, isConnected } = useWeb3ModalAccount();
   const [fromNetwork, setFromNetwork] = useGlobalState("fromNetwork");
   const [toNetwork, setToNetwork] = useGlobalState("toNetwork");
+  const [receiverAddress] = useGlobalState("receiverAddress");
   const [, setUpdateBalances] = useGlobalState("updateBalances");
-  
+
   const [generatedMessage, setMessage] = useState<Message>();
   const [feeTokens, setFeeTokens] = useState<FeeTokens>();
   const [selectedFeeToken, setSelectedFeeToken] = useState<string>("");
@@ -89,35 +85,8 @@ export default function CCIPBridge() {
   const [ccipFees, setCcipFees] = useState<string>("0");
   const [amount, setAmount] = useState<string>("0");
 
-  const [receiverAddress, setReceiverAddress] = useState<string | `0x${string}` | undefined>(address);
-  const [showReceiverAddress, setShowReceiverAddress] = useState(false);
-  
   const [debouncedAmount] = useDebounce(amount, 500); // 500ms delay
 
-  useEffect(() => {
-    try {
-      if(!receiverAddress) { setReceiverAddress(address); return }
-      if(getAddress(receiverAddress)) {
-        setReceiverAddress(getAddress(address as string))
-        return
-      }
-      if(!getAddress(receiverAddress)) { setReceiverAddress(getAddress(address as string)); return }
-    } catch (error) {
-      console.log('error in receiverAddress useEffect', error)
-    }
-  }, [address, chainId, isConnected, showReceiverAddress])
-
-  const filterReceiverAddress = (value: string) => {
-    try {
-      console.log('valuevaluevaluevalue', value)
-      const filteredValue = getAddress(value as string)
-      if(getAddress(value as string)) setReceiverAddress(getAddress(filteredValue))
-      if(!getAddress(value as string)) setReceiverAddress(getAddress(address as string))
-    } catch (error) {
-      console.log('error in receiverAddress filterReceiverAddress', error)
-    }
-  }
-  
   useEffect(() => {
     if (chainId) {
       setFromNetwork(getChainsByID(`0x${chainId.toString(16)}`));
@@ -419,7 +388,7 @@ export default function CCIPBridge() {
                 onChange={(e) => updateAmount(e.target.value)}
               />
               <button className="w-1/3 flex flex-row justify-center items-center">
-                <RotatingArrow active={true} pixels={18}/>
+                {/* <RotatingArrow active={true} pixels={18}/> */}
                 <span className="mx-2"> BnM </span>
               </button>
               <button
@@ -429,23 +398,7 @@ export default function CCIPBridge() {
                 MAX
               </button>
             </div>
-              { isConnected && 
-                <div className="flex justify-between text-lg mt-1 h-7">
-                  {!showReceiverAddress && <button onClick={() => setShowReceiverAddress(!showReceiverAddress)}><FaRegEyeSlash/></button>}
-                  {showReceiverAddress && 
-                    <>
-                      <button onClick={() => setShowReceiverAddress(!showReceiverAddress)}><FaRegEye/></button>
-                      <div className="flex justify-center items-center mx-2 text-sm">Receiver: </div>
-                      <input
-                        className="w-full bg-chainlinkMirage rounded-lg placeholder-white text-sm text-center"
-                        name="tokenAmount"
-                        value={receiverAddress as string}
-                        onChange={(e) => filterReceiverAddress(e.target.value)}
-                      />
-                    </>
-                  }
-                </div>
-              }
+            <CCIPOptionalReceiverAddress />
 
             <CCIPBridgeFeeTokens
               ccipFees={ccipFees}
