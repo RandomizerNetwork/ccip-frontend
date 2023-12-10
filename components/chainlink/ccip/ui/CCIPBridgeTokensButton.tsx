@@ -13,12 +13,12 @@ import CCIPApproveModal from './CCIPApproveModal';
 import erc20Abi from '@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
 import ccipConfig from '@/utils/providers/chainlink/ccip/config';
 import routerAbi from '@/utils/providers/chainlink/ccip/abi/Router.json';
+import CCIPTokenSenderABI from '@/utils/providers/chainlink/ccip/abi/CCIPTokenSenderABI.json';
 import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers5/react';
 import getChainsByID from '@/utils/providers/chainlink/ccip/config/chainsByID';
 import changeNetwork from '@/utils/helpers/changeNetwork';
 import useGlobalState from '@/store/globalState';
 import { CCIPMenuEnum } from '@/utils/types/store';
-import { CCIPTokenSender__factory } from '@/typechain-types';
 
 interface IBridgeButton {
   fromNetwork: string;
@@ -411,7 +411,7 @@ export default function CCIPBridgeTokensButton({
 
         const ccipTokenSenderContract = new ethers.Contract(
           ccipTokenSenderAddress,
-          CCIPTokenSender__factory.abi,
+          CCIPTokenSenderABI,
           signer
         )
   
