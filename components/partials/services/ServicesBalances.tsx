@@ -4,9 +4,11 @@ import { getAddress } from '@ethersproject/address';
 import multicallBalanceProvider from '@/utils/helpers/multicall';
 import useWallet from '@/hooks/useWallet';
 import useGlobalState from '@/store/globalState';
+import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
 
 export default function ServicesBalances() {
-  const { chainId, ethersProvider, address, isConnected } = useWallet();
+  const { ethersProvider } = useWallet();
+  const { address, chainId, isConnected } = useWeb3ModalAccount();
   const [updateBalances] = useGlobalState('updateBalances');
   const [, setBalances] = useGlobalState('balances');
 

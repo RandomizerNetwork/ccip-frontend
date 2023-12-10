@@ -18,6 +18,7 @@ import getChainsByID from '@/utils/providers/chainlink/ccip/config/chainsByID';
 import changeNetwork from '@/utils/helpers/changeNetwork';
 import useGlobalState from '@/store/globalState';
 import { CCIPMenuEnum } from '@/utils/types/store';
+import { CCIPTokenSender__factory } from '@/typechain-types';
 
 interface IBridgeButton {
   fromNetwork: string;
@@ -38,11 +39,11 @@ export default function CCIPBridgeTokensButton({
   ccipFees,
   message,
 }: IBridgeButton) {
-  const { ethersProvider, address } = useWallet();
-  // const [{ connectedChain }, setChain] = useSetChain();
+  const { ethersProvider } = useWallet();
+
   const parsedFee = ethers.utils.parseEther(ccipFees);
 
-  const { chainId, isConnected } = useWeb3ModalAccount();
+  const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider()
   
   const [ccipMenu] = useGlobalState('ccipMenu');
@@ -73,6 +74,9 @@ export default function CCIPBridgeTokensButton({
   const destinationChainSelector = ccipConfig.getRouterConfig(
     details.destinationChain
   ).chainSelector;
+  const ccipTokenSenderAddress = ccipConfig.getRouterConfig(
+    details.sourceChain
+  ).ccipTokenSenderContract;
 
   const amountBN: BigNumber = ethers.utils.parseEther(amount.replace(',', '.'));
 
@@ -91,7 +95,7 @@ export default function CCIPBridgeTokensButton({
       );
       const allowance: BigNumber = await erc20.allowance(
         details.senderAddress,
-        sourceRouterAddress
+        ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress
       );
       setBnMAllowance(
         `${ethers.utils.formatEther(allowance.toString())} ${details.tokenKey}`
@@ -136,14 +140,14 @@ export default function CCIPBridgeTokensButton({
 
       try {
         const approvalTx = await erc20.approve(
-          sourceRouterAddress,
+          ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress,
           modalApprovalSelection ? amountBN : ethers.constants.MaxUint256
         );
         triggerToast('QUEUE_APPROVAL_WAITING');
         await approvalTx.wait(); // wait for the transaction to be mined
         triggerToast('QUEUE_APPROVAL_SUCCESS');
         console.log(
-          `1 approved router ${sourceRouterAddress} to spend ${amountBN.toString()} 
+          `1 approved router ${ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress} to spend ${amountBN.toString()} 
             of token ${details.tokenAddress}. Transaction: ${approvalTx.hash}`
         );
         // setBnMApproved(true);
@@ -184,7 +188,7 @@ export default function CCIPBridgeTokensButton({
         );
         const allowance: BigNumber = await erc20.allowance(
           details.senderAddress,
-          sourceRouterAddress
+          ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress,
         );
         // setBnMAllowance(`${ethers.utils.formatEther(allowance.toString())} ${details.tokenKey}`)
         setFeeTokenAllowance(
@@ -245,7 +249,7 @@ export default function CCIPBridgeTokensButton({
       const erc20 = new ethers.Contract(details.tokenAddress, erc20Abi, signer);
       const allowance = await erc20.allowance(
         details.senderAddress,
-        sourceRouterAddress
+        ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress,
       );
       // let sendTx;
       let approvalTx;
@@ -258,12 +262,12 @@ export default function CCIPBridgeTokensButton({
         // approvalTx = await erc20.approve(sourceRouterAddress, '0');
 
         if (amountBN > allowance) {
-          approvalTx = await erc20.approve(sourceRouterAddress, amountBN);
+          approvalTx = await erc20.approve(ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress, amountBN);
           triggerToast('QUEUE_APPROVAL_WAITING');
           await approvalTx.wait(); // wait for the transaction to be mined
           triggerToast('QUEUE_APPROVAL_SUCCESS');
           console.log(
-            `1 approved router ${sourceRouterAddress} to spend ${amountBN.toString()} of token ${
+            `1 approved router ${ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress} to spend ${amountBN.toString()} of token ${
               details.tokenAddress
             }. Transaction: ${approvalTx.hash}`
           );
@@ -283,14 +287,14 @@ export default function CCIPBridgeTokensButton({
         // Amount tokens to approve are transfer amount + fees
         if (amountBN.add(parsedFee) > allowance) {
           approvalTx = await erc20.approve(
-            sourceRouterAddress,
+            ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress,
             amountBN.add(parsedFee)
           );
           triggerToast('QUEUE_APPROVAL_WAITING');
           await approvalTx.wait(); // wait for the transaction to be mined
           triggerToast('QUEUE_APPROVAL_SUCCESS');
           console.log(
-            `2 approved router ${sourceRouterAddress} to spend ${amountBN.toString()} and fees ${parsedFee} of token ${
+            `2 approved router ${ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress} to spend ${amountBN.toString()} and fees ${parsedFee} of token ${
               details.tokenAddress
             }. Transaction: ${approvalTx.hash}`
           );
@@ -304,12 +308,12 @@ export default function CCIPBridgeTokensButton({
       // fee token is different than the token to transfer
       // 2 approvals
       if (amountBN > allowance) {
-        approvalTx = await erc20.approve(sourceRouterAddress, amountBN); // 1 approval for the tokens to transfer
+        approvalTx = await erc20.approve(ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress, amountBN); // 1 approval for the tokens to transfer
         triggerToast('QUEUE_APPROVAL_WAITING');
         await approvalTx.wait(); // wait for the transaction to be mined
         triggerToast('QUEUE_APPROVAL_SUCCESS');
         console.log(
-          `3 approved router ${sourceRouterAddress} to spend ${amountBN.toString()} of token ${
+          `3 approved router ${ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress} to spend ${amountBN.toString()} of token ${
             details.tokenAddress
           }. Transaction: ${approvalTx.hash}`
         );
@@ -319,10 +323,10 @@ export default function CCIPBridgeTokensButton({
         erc20Abi,
         signer
       );
-      approvalTx = await erc20Fees.approve(sourceRouterAddress, parsedFee); // 1 approval for the fees token
+      approvalTx = await erc20Fees.approve(ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress, parsedFee); // 1 approval for the fees token
       await approvalTx.wait();
       console.log(
-        `4 approved router ${sourceRouterAddress} to spend  fees ${parsedFee} of token ${details.feeTokenAddress}. Transaction: ${approvalTx.hash}`
+        `4 approved router ${ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress} to spend  fees ${parsedFee} of token ${details.feeTokenAddress}. Transaction: ${approvalTx.hash}`
       );
 
       setRetriggerState(!retriggerState);
@@ -399,16 +403,22 @@ export default function CCIPBridgeTokensButton({
       }
 
       if(ccipMenu === CCIPMenuEnum.PrivateBeta) {
-        const sourceRouter = new ethers.Contract(
-          sourceRouterAddress,
-          routerAbi,
+        // const sourceRouter = new ethers.Contract(
+        //   sourceRouterAddress,
+        //   routerAbi,
+        //   signer
+        // );
+
+        const ccipTokenSenderContract = new ethers.Contract(
+          ccipTokenSenderAddress,
+          CCIPTokenSender__factory.abi,
           signer
-        );
+        )
   
         let sendTx;
         let receiptTx;
         if (!details.feeTokenAddress) {
-          sendTx = await sourceRouter.ccipSend(
+          sendTx = await ccipTokenSenderContract.ccipSend(
             destinationChainSelector,
             message,
             {
@@ -417,7 +427,7 @@ export default function CCIPBridgeTokensButton({
           ); // fees are send as value since we are paying the fees in native
           receiptTx = await sendTx.wait(); // wait for the transaction to be mined
         } else {
-          sendTx = await sourceRouter.ccipSend(destinationChainSelector, message);
+          sendTx = await ccipTokenSenderContract.ccipSend(destinationChainSelector, message);
           receiptTx = await sendTx.wait(); // wait for the transaction to be mined
         }
         console.log('sendTx', sendTx);

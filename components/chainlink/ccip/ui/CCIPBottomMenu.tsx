@@ -6,7 +6,7 @@ export default function CCIPBottomMenu() {
   const [ccipCategories] = useGlobalState("ccipCategories");
   return (
     <>
-      <div className="text-chainlinkZircon p-1 bg-chainlinkBlue flex flex-col items-center justify-center w-80 mt-44 mx-auto">
+      <div className="text-chainlinkZircon p-1 bg-chainlinkBlue flex flex-col items-center justify-center w-80 mt-12 mx-auto">
         <div className="flex justify-center text-center">
           More CCIP use cases comming soon <br /> for the Swiss Army Knive
           Roadmap
