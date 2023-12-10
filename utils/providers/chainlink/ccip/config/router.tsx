@@ -35,7 +35,6 @@ const ethereumMainnet = {
     WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     LINK: '0x514910771AF9Ca656af840dff83E8264EcF986CA',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0x94025780a1aB58868D9B2dBBB775f44b32e8E6e5',
   },
@@ -44,11 +43,11 @@ const ethereumMainnet = {
 const ethereumSepolia = {
   networkName: 'Ethereum',
   networkStage: 'Sepolia',
-  address: '0xd0daae2231e9cb96b94c8512223533293c3693bf',
+  address: '0x0bf3de8c5d3e8a2b34d2beeb17abfcebaf363a59',
   chainSelector: '16015286601757825753',
   lanes: [
     'polygonMumbai',
-    'arbitrumGoerli',
+    // 'arbitrumGoerli',
     'avalancheFuji',
     'binanceTestnet',
     'optimismGoerli',
@@ -59,10 +58,9 @@ const ethereumSepolia = {
     WETH: '0x097D90c9d3E0B50Ca60e1ae45F6A81010f9FB534',
     LINK: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05', // BnM for TESTNET
-  }
+  },
 };
 
 const ethereumGoerli = {
@@ -76,7 +74,6 @@ const ethereumGoerli = {
     WETH: '0x097D90c9d3E0B50Ca60e1ae45F6A81010f9FB534',
     LINK: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05', // BnM for TESTNET
   },
@@ -93,7 +90,6 @@ const baseMainnet = {
     WETH: '0x4200000000000000000000000000000000000006',
     LINK: '0x88Fb150BDc53A65fe94Dea0c9BA0a6dAf8C6e196',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '',
   },
@@ -102,15 +98,14 @@ const baseMainnet = {
 const baseGoerli = {
   networkName: 'Base',
   networkStage: 'Testnet',
-  address: '0xa8c0c11bf64af62cdca6f93d3769b88bdd7cb93d',
+  address: '0x80af2f44ed0469018922c9f483dc5a909862fdc2',
   chainSelector: '5790810961207155433',
-  lanes: ['ethereumSepolia'],
+  lanes: ['ethereumSepolia', 'optimismGoerli', 'binanceTestnet', 'avalancheFuji'],
   feeTokens: {
     ETH: '',
-    WETH: '',
+    WETH: '0x4200000000000000000000000000000000000006',
     LINK: '0xd886e2286fd1073df82462ea1822119600af80b6',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0xbf9036529123de264bfa0fc7362fe25b650d4b16',
   },
@@ -127,7 +122,6 @@ const optimismMainnet = {
     WETH: '0x4200000000000000000000000000000000000006',
     LINK: '0x350a791Bfc2C21F9Ed5d10980Dad2e2638ffa7f6',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '',
   },
@@ -136,15 +130,20 @@ const optimismMainnet = {
 const optimismGoerli = {
   networkName: 'Optimism',
   networkStage: 'Testnet',
-  address: '0xeb52e9ae4a9fb37172978642d4c141ef53876f26',
+  address: '0xcc5a0b910d9e9504a7561934bed294c51285a78d',
   chainSelector: '2664363617261496610',
-  lanes: ['ethereumSepolia', 'arbitrumGoerli', 'avalancheFuji'],
+  lanes: [
+    'ethereumSepolia', 
+    // 'arbitrumGoerli', 
+    'avalancheFuji',
+    'polygonMumbai',
+    'baseGoerli'
+  ],
   feeTokens: {
     ETH: '',
     WETH: '0x4200000000000000000000000000000000000006',
     LINK: '0xdc2CC710e42857672E7907CF474a69B63B93089f',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0xaBfE9D11A2f1D61990D1d253EC98B5Da00304F16',
   },
@@ -161,7 +160,6 @@ const avalancheMainnet = {
     WAVAX: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7',
     LINK: '0x5947BB275c521040051D82396192181b413227A3',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '',
   },
@@ -170,15 +168,20 @@ const avalancheMainnet = {
 const avalancheFuji = {
   networkName: 'Avalanche',
   networkStage: 'Fuji',
-  address: '0x554472a2720e5e7d5d3c817529aba05eed5f82d8',
+  address: '0xf694e193200268f9a4868e4aa017a0118c9a8177',
   chainSelector: '14767482510784806043',
-  lanes: ['ethereumSepolia', 'optimismGoerli', 'polygonMumbai'],
+  lanes: [
+    'ethereumSepolia', 
+    'optimismGoerli', 
+    'polygonMumbai',
+    'binanceTestnet',
+    'baseGoerli'
+  ],
   feeTokens: {
     AVAX: '',
     WAVAX: '0xd00ae08403B9bbb9124bB305C09058E32C39A48c',
     LINK: '0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0xD21341536c5cF5EB1bcb58f6723cE26e8D8E90e4',
   },
@@ -195,7 +198,6 @@ const arbitrumMainnet = {
     WETH: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
     LINK: '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '',
   },
@@ -212,7 +214,6 @@ const arbitrumGoerli = {
     WETH: '0x32d5D5978905d9c6c2D4C417F0E06Fe768a4FB5a',
     LINK: '0xd14838A68E8AFBAdE5efb411d5871ea0011AFd28',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0x0579b4c1C8AcbfF13c6253f1B10d66896Bf399Ef',
   },
@@ -234,7 +235,6 @@ const polygonMainnet = {
     WMATIC: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
     LINK: '0xb0897686c545045aFc77CF20eC7A532E3120E0F1',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '',
   },
@@ -243,7 +243,7 @@ const polygonMainnet = {
 const polygonMumbai = {
   networkName: 'Polygon',
   networkStage: 'Mumbai',
-  address: '0x70499c328e1e2a3c41108bd3730f6670a44595d1',
+  address: '0x1035cabc275068e0f4b745a29cedf38e13af41b1',
   chainSelector: '12532609583862916517',
   lanes: [
     'ethereumSepolia',
@@ -256,7 +256,6 @@ const polygonMumbai = {
     WMATIC: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
     LINK: '0x326C977E6efc84E512bB9C30f76E30c160eD06FB',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40',
   },
@@ -278,7 +277,6 @@ const binanceMainnet = {
     WBNB: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
     LINK: '0x404460C6A5EdE2D891e8297795264fDe62ADBB75',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '',
   },
@@ -287,15 +285,19 @@ const binanceMainnet = {
 const binanceTestnet = {
   networkName: 'Binance',
   networkStage: 'Testnet',
-  address: '0x9527e2d01a3064ef6b50c1da1c0cc523803bcff2',
+  address: '0xe1053ae1857476f36a3c62580ff9b016e8ee8f6f',
   chainSelector: '13264668187771770619',
-  lanes: ['ethereumSepolia'],
+  lanes: [
+    'ethereumSepolia',
+    'avalancheFuji',
+    'polygonMumbai',
+    'baseGoerli'
+  ],
   feeTokens: {
     BNB: '',
     WBNB: '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
     LINK: '0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06',
   },
-  ccipERC20PrivateBeta: '',
   whitelistedTokens: {
     BnM: '0xbfa2acd33ed6eec0ed3cc06bf1ac38d22b36b9e9',
   },
