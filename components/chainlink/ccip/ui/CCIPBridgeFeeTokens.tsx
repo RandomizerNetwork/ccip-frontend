@@ -3,6 +3,7 @@ import RotatingArrow from '@/components/header/partials/RotatingArrow';
 import CCIPNetworkFeeTokenIcon from './CCIPNetworkFeeTokenIcon';
 import { FeeTokens } from '@/utils/providers/chainlink/ccip/config/router';
 import { v4 as uuidv4 } from 'uuid';
+import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
 
 type ICCIPBridgeFeeTokens = {
   ccipFees: string;
@@ -49,9 +50,11 @@ export default function CCIPBridgeFeeTokens({
     };
   }, [openFeeTokenModal, setOpenFeeTokenModal]);
 
+  const { isConnected } = useWeb3ModalAccount();
+
   return (
     <section ref={modalRef}>
-      <div className="flex justify-between mt-1 text-lg">
+      <div className={`flex justify-between ${isConnected ? 'mt-1' : 'mt-4'} text-lg`}>
         <div className="flex justify-center items-center text-gray-200">
           Fee
         </div>

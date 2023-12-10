@@ -56,10 +56,11 @@ import { getAddress } from '@ethersproject/address';
   // [] 19.1 Tokens Modal => SupportedTokens -> Multicall (Decimals + Symbol + Logo)
   // [] 19.2 Deploy Helper Contract to allow up to approve multiple tokens and even pay the CCIP Fee and also add EIP712 for a better user experience
   // [] 19.3 Simplify the UI 
-// [] 20. Add hardhat with deterministic utility contract
-// [] 21. Deploy deterministic factory contract on 7 chains
-// [] 22. Deploy deterministic ccip contract on 7 chains
-// [] 23. Make UI adaptable to both General Access and Private Beta methods with CCIP Single ERC20Token transfer between chains
+// [x] 20. Add hardhat with deterministic utility contract
+// [x] 21. Deploy deterministic factory contract on 7 chains
+// [x] 22. Deploy deterministic ccip contract on 7 chains
+// [x] 23. Make UI adaptable to both General Access and Private Beta methods with CCIP Single ERC20Token transfer between chains
+// [x] 24. Added optional receiver 
 
 // TODO
 // [x] 1. CCIP Bridge - General Access Single Token
@@ -428,21 +429,23 @@ export default function CCIPBridge() {
                 MAX
               </button>
             </div>
-              <div className="flex justify-between text-lg mt-1 h-7">
-                {!showReceiverAddress && <button onClick={() => setShowReceiverAddress(!showReceiverAddress)}><FaRegEyeSlash/></button>}
-                {showReceiverAddress && 
-                  <>
-                    <button onClick={() => setShowReceiverAddress(!showReceiverAddress)}><FaRegEye/></button>
-                    <div className="flex justify-center items-center mx-2 text-sm">Receiver: </div>
-                    <input
-                      className="w-full bg-chainlinkMirage rounded-lg placeholder-white text-sm text-center"
-                      name="tokenAmount"
-                      value={receiverAddress as string}
-                      onChange={(e) => filterReceiverAddress(e.target.value)}
-                    />
-                  </>
-                }
-              </div>
+              { isConnected && 
+                <div className="flex justify-between text-lg mt-1 h-7">
+                  {!showReceiverAddress && <button onClick={() => setShowReceiverAddress(!showReceiverAddress)}><FaRegEyeSlash/></button>}
+                  {showReceiverAddress && 
+                    <>
+                      <button onClick={() => setShowReceiverAddress(!showReceiverAddress)}><FaRegEye/></button>
+                      <div className="flex justify-center items-center mx-2 text-sm">Receiver: </div>
+                      <input
+                        className="w-full bg-chainlinkMirage rounded-lg placeholder-white text-sm text-center"
+                        name="tokenAmount"
+                        value={receiverAddress as string}
+                        onChange={(e) => filterReceiverAddress(e.target.value)}
+                      />
+                    </>
+                  }
+                </div>
+              }
 
             <CCIPBridgeFeeTokens
               ccipFees={ccipFees}
