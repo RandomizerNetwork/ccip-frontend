@@ -133,7 +133,7 @@ export const liveChains =
 const metadata = {
   name: "Chainlink CCIP",
   description:
-    "Chainlink Cross-Chain Interoperability Protocol (CCIP) Frontend for Constelation Hackathon",
+    "Chainlink Cross-Chain Interoperability Protocol (CCIP) Frontend for Constellation Hackathon",
   url: "https://ccip.randomizer.network",
   icons: ["https://avatars.mywebsite.com/"],
 };

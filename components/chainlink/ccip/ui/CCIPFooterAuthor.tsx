@@ -13,7 +13,7 @@ export default function CCIPFooterAuthor() {
             className="flex justify-center text-chainlinkBlue"
           >
             {" "}
-            Chainlink Constelation Hackathon
+            Chainlink Constellation Hackathon
           </Link>
         </div>
       </div>
