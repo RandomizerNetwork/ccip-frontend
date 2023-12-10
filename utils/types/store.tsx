@@ -14,6 +14,19 @@ export enum CCIPMenuEnum {
   GApb = "GA + PB", // General Access + Private Beta
 }
 
+
+export type CCIPCategories = {
+  // top
+  topCategories: string[],
+  topAddons: string[],
+  topExtra: string[],
+  status: string[],
+  // bottom
+  categories: string[],
+  addons: string[],
+  extra: string[],
+}
+
 export type GlobalTypes = {
   isLoading: boolean;
   sideNavMenuOpen: boolean;
@@ -23,5 +36,6 @@ export type GlobalTypes = {
   toNetwork: string;
   ccipStore: CCIPMessage;
   ccipMenu: CCIPMenuEnum;
+  ccipCategories: CCIPCategories;
   receiverAddress: string | `0x${string}` | undefined;
 };

@@ -6,19 +6,19 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 export default function CCIPOptionalReceiverAddress() {
   const { address, chainId, isConnected } = useWeb3ModalAccount();
-//   const [receiverAddress, setReceiverAddress] = useState<string | `0x${string}` | undefined>(address);
-  const [showReceiverAddress, setShowReceiverAddress] = useState(false);
-  
   const [receiverAddress, setReceiverAddress] = useGlobalState("receiverAddress");
+  const [showReceiverAddress, setShowReceiverAddress] = useState(false);
 
   useEffect(() => {
     try {
-      if(!receiverAddress) { setReceiverAddress(address); return }
-      if(getAddress(receiverAddress)) {
-        setReceiverAddress(getAddress(receiverAddress))
-        return
+      if (typeof window !== "undefined") {
+        if(!receiverAddress) { setReceiverAddress(address); return }
+        if(getAddress(receiverAddress)) {
+          setReceiverAddress(getAddress(receiverAddress))
+          return
+        }
+        if(!getAddress(receiverAddress)) { setReceiverAddress(getAddress(address as string)); return }
       }
-      if(!getAddress(receiverAddress)) { setReceiverAddress(getAddress(address as string)); return }
     } catch (error) {
       console.log('error in receiverAddress useEffect', error)
     }

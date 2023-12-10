@@ -25,6 +25,10 @@ import RotatingArrow from "@/components/header/partials/RotatingArrow";
 import { v4 as uuidv4 } from 'uuid';
 import { CCIPMenuEnum } from "@/utils/types/store";
 import CCIPOptionalReceiverAddress from "./ui/CCIPOptionalReceiverAddress";
+import CCIPHeaderSection from "./ui/CCIPHeaderSection";
+import CCIPHeaderTopMenu from "./ui/CCIPHeaderTopMenu";
+import CCIPBottomMenu from "./ui/CCIPBottomMenu";
+import CCIPFooterAuthor from "./ui/CCIPFooterAuthor";
 
 // TODO CCIP UI
 // [x] 1. FEE TOKENS MINI-MODAL
@@ -254,29 +258,6 @@ export default function CCIPBridge() {
     getBnMFee();
   }, [fromNetwork, toNetwork, address, details, debouncedAmount, chainId]);
 
-  const ccipCategories = {
-    // top
-    topCategories: ['General Access', 'Private Beta', 'GA + PB'],
-    topAddons: ['Single-Token', 'Single-Token', 'Multi-Token'],
-    topExtra: ['CCIP ERC20','CCIP ERC20','COMMING SOON'],
-    status: ['ACTIVE','',''],
-    // bottom
-    categories: ['General Access', 'Private Beta', 'Messages', 'NFT', 'DeFi', 'Random', 'Assets', 'Payments'],
-    addons: ['Multi-Token', 'Multi-Token', 'Contract-Call', 'Crosschain', 'Liqudity LP', 'Events', 'Tokenization', 'P2P'],
-    extra: ['ERC20/ERC677','ERC20/ERC677','CCIP','ERC721/ERC1155','VRF+Keepers','Crosschain', 'Proof of reserve','CCIP'],
-  }
-  
-  const [ccipMenu, setCcipMenu] = useGlobalState('ccipMenu');
-
-  const processCcipCategory = (category: string) => {
-    // Implement extra logic here to switch between tabs or handle category selection
-    console.log(`Selected category: ${category}`);
-    if(category === ccipCategories.topCategories[0]) setCcipMenu(CCIPMenuEnum.GeneralAccess)
-    if(category === ccipCategories.topCategories[1]) setCcipMenu(CCIPMenuEnum.PrivateBeta)
-    if(category === ccipCategories.topCategories[2]) return
-    // if(category === ccipCategories.topCategories[2]) setCcipMenu(CCIPMenuEnum.GApb)
-  }
-
   return (
     <section className={`w-full mx-auto`}>
       <Lottie
@@ -290,47 +271,8 @@ export default function CCIPBridge() {
         }}
       />
       <div className="absolute mx-auto w-full">
-        <div className="product-header_tag-wrapper">
-          <Link
-            target="_blank"
-            href={`https://chain.link/cross-chain`}
-            rel="noopener noreferrer"
-            className="flex flex-row justify-center items-center gap-2 bg-zir rounded-lg my-2 py-1 w-28 mx-auto bg-chainlinkLavender"
-          >
-            <div className="flex">
-              <Image
-                src="/images/tokens/BnM.svg"
-                loading="lazy"
-                alt="Chainlink CCIP logo"
-                width={23}
-                height={23}
-                className="mx-auto"
-              />
-            </div>
-            <h1 className="text-chainlinkMirage flex justify-center text-xl">
-              CCIP
-            </h1>
-          </Link>
-        </div>
-        <h2 className="flex w-full items-center justify-center text-center z-80 text-4xl my-2 text-chainlinkBlue">
-          Cross-chain by Chainlink
-        </h2>
-        <h3 className="flex w-full items-center justify-center text-center z-80 text-2xl my-2 text-chainlinkBiscay">
-          The era of secure blockchain interoperability has arrived.
-        </h3>
-        <section id="ccipCategories" className="grid grid-cols-3 gap-1 justify-items-center sm:flex sm:flex-row sm:justify-items-start items-center justify-center w-full mt-5">
-          {ccipCategories.topCategories.map((topCategory, index) => (
-            <button
-              key={uuidv4()}
-              onClick={() => processCcipCategory(topCategory)}
-              className={`${ccipMenu === topCategory && 'border-chainlinkBlue border-2'} hover:opacity-90 rounded-tl rounded-tr rounded-lg mx-1 bg-chainlinkBiscay text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:border-chainlinkBlue focus:ring-opacity-50 transition duration-300 ease-in-out`}
-            >
-              <div className={`text-md h-10 flex justify-center items-center ${ccipMenu === topCategory ? 'bg-chainlinkBlue text-chainlinkZircon': 'bg-chainlinkLavender text-chainlinkMirage'} rounded-tl rounded-tr w-32 sm:w-44`}>{topCategory}</div>
-              <div className={`text-sm h-9 flex justify-center items-center text-chainlinkPerano`}>{ccipCategories.topExtra[index]}</div>
-              <div className={`text-sm h-8 flex justify-center items-center bg-chainlinkMirage`}>{ccipCategories.topAddons[index]}</div>
-            </button>
-          ))}
-        </section>
+        <CCIPHeaderSection />
+        <CCIPHeaderTopMenu />
         <div className={`flex w-full max-w-[480px] h-auto mx-auto my-4`}>
           <div
             className="bg-chainlinkBiscay w-full rounded-lg p-4"
@@ -432,42 +374,8 @@ export default function CCIPBridge() {
             </div>
           </div>
         </div>
-
-        <div className="flex justify-center w-full text-chainlinkMirage">
-          Built with 💜 for the {" "} 
-          <div className="ml-1">
-          <Link target="_blank" href="https://chain.link/hackathon" className="flex justify-center text-chainlinkBlue">
-            {" "} Chainlink Constelation Hackathon
-          </Link>
-          </div>
-        </div>
-        <div className="flex flex-row justify-center w-full text-chainlinkMirage">
-          <div className="flex justify-center"> by </div>
-          <Link target="_blank" href="https://www.github.com/Liberalite" className="text-chainlinkBlue mx-1">
-              Liberalite
-          </Link>
-          <div className="flex justify-center mr-1"> from </div>
-          <Link target="_blank" href="https://www.randomizer.network/" className="text-chainlinkBlue">
-              randomizer.network 
-            </Link>
-        </div>
-
-        <div className="text-chainlinkZircon p-1 bg-chainlinkBlue flex flex-col items-center justify-center w-80 mt-44 mx-auto">
-          <div className="flex justify-center text-center">More CCIP use cases comming soon <br/> for the Swiss Army Knive Roadmap</div>
-        </div>
-        <section id="ccipCategories" className="grid grid-cols-3 sm:grid-cols-4 gap-1 justify-items-center md:flex md:flex-row md:justify-items-start items-center justify-center w-full mt-5">
-          {ccipCategories.categories.map((category, index) => (
-            <button
-              key={uuidv4()}
-              onClick={() => processCcipCategory(category)}
-              className="w-28 sm:w-36 rounded-lg px-1 sm:px-4 py-2 mx-2 text-white hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:border-chainlinkBlue focus:ring-opacity-50 transition duration-300 ease-in-out"
-            >
-              <div className="text-md bg-chainlinkBlue p-1 rounded-tl rounded-tr h-14 flex items-center justify-center">{category}</div>
-              <div className="text-sm bg-chainlinkMirage rounded-bl rounded-br">{ccipCategories.addons[index]}</div>
-              <div className="text-xs text-chainlinkBlue mt-1">{ccipCategories.extra[index]}</div>
-            </button>
-          ))}
-        </section>
+        <CCIPFooterAuthor />
+        <CCIPBottomMenu />
       </div>
     </section>
   );
