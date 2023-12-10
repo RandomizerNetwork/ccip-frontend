@@ -94,12 +94,16 @@ export default function CCIPBridge() {
   const [debouncedAmount] = useDebounce(amount, 500); // 500ms delay
 
   useEffect(() => {
-    if(!receiverAddress) { setReceiverAddress(address); return }
-    if(getAddress(receiverAddress)) {
-      setReceiverAddress(getAddress(address as string))
-      return
+    try {
+      if(!receiverAddress) { setReceiverAddress(address); return }
+      if(getAddress(receiverAddress)) {
+        setReceiverAddress(getAddress(address as string))
+        return
+      }
+      if(!getAddress(receiverAddress)) { setReceiverAddress(getAddress(address as string)); return }
+    } catch (error) {
+      console.log('error in receiverAddress useEffect', error)
     }
-    if(!getAddress(receiverAddress)) { setReceiverAddress(getAddress(address as string)); return }
   }, [address, chainId, isConnected, showReceiverAddress])
 
   const filterReceiverAddress = (value: string) => {
@@ -109,7 +113,7 @@ export default function CCIPBridge() {
       if(getAddress(value as string)) setReceiverAddress(getAddress(filteredValue))
       if(!getAddress(value as string)) setReceiverAddress(getAddress(address as string))
     } catch (error) {
-      setReceiverAddress(address)
+      console.log('error in receiverAddress filterReceiverAddress', error)
     }
   }
   
