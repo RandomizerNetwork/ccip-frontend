@@ -1,34 +1,31 @@
 // CCIPBridge.tsx
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { ethers } from "ethers";
 import { useDebounce } from "use-debounce";
+import { useWeb3ModalAccount } from "@web3modal/ethers5/react";
+import { Message, TransferDetails } from "@/utils/types/ccip";
+import Link from "next/link";
 import Lottie from "lottie-react";
-import Image from "next/image";
 import useWallet from "@/hooks/useWallet";
 import ccipRouterConfig, { FeeTokens } from "@/utils/providers/chainlink/ccip/config/router";
 import ccipConfig from "@/utils/providers/chainlink/ccip/config";
-import CCIPBridgeTokensButton from "./ui/CCIPBridgeTokensButton";
-import CCIPNetworkButton from "@/components/chainlink/ccip/ui/CCIPNetworkButton";
-import getChainlinkCCIPFee from "./utils/getChainlinkCCIPFee";
-import { Message, TransferDetails } from "@/utils/types/ccip";
-import CCIPBridgeFeeTokens from "./ui/CCIPBridgeFeeTokens";
+import getChainlinkCCIPFee from "@/components/chainlink/ccip/utils/getChainlinkCCIPFee";
 import useGlobalState from "@/store/globalState";
 import getChainsByID from "@/utils/providers/chainlink/ccip/config/chainsByID";
-import CCIPAnimation from "@/public/lottie/ccip.json";
-import erc20Abi from "@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json";
-import formatEtherToLocaleString from "@/utils/formatters/formatEther";
-import { useWeb3ModalAccount } from "@web3modal/ethers5/react";
-import CCIPTokenIcon from "./ui/CCIPTokenIcon";
 import RotatingArrow from "@/components/header/partials/RotatingArrow";
-import { v4 as uuidv4 } from 'uuid';
-import { CCIPMenuEnum } from "@/utils/types/store";
-import CCIPOptionalReceiverAddress from "./ui/CCIPOptionalReceiverAddress";
-import CCIPHeaderSection from "./ui/CCIPHeaderSection";
-import CCIPHeaderTopMenu from "./ui/CCIPHeaderTopMenu";
-import CCIPBottomMenu from "./ui/CCIPBottomMenu";
-import CCIPFooterAuthor from "./ui/CCIPFooterAuthor";
+import formatEtherToLocaleString from "@/utils/formatters/formatEther";
+import erc20Abi from "@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json";
+import CCIPBridgeTokensButton from "@/components/chainlink/ccip/ui/CCIPBridgeTokensButton";
+import CCIPNetworkButton from "@/components/chainlink/ccip/ui/CCIPNetworkButton";
+import CCIPBridgeFeeTokens from "@/components/chainlink/ccip/ui/CCIPBridgeFeeTokens";
+import CCIPAnimation from "@/public/lottie/ccip.json";
+import CCIPTokenIcon from "@/components/chainlink/ccip/ui/CCIPTokenIcon";
+import CCIPOptionalReceiverAddress from "@/components/chainlink/ccip/ui/CCIPOptionalReceiverAddress";
+import CCIPHeaderSection from "@/components/chainlink/ccip/ui/CCIPHeaderSection";
+import CCIPHeaderTopMenu from "@/components/chainlink/ccip/ui/CCIPHeaderTopMenu";
+import CCIPBottomMenu from "@/components/chainlink/ccip/ui/CCIPBottomMenu";
+import CCIPFooterAuthor from "@/components/chainlink/ccip/ui/CCIPFooterAuthor";
 
 // TODO CCIP UI
 // [x] 1. FEE TOKENS MINI-MODAL

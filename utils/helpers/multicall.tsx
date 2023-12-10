@@ -146,6 +146,7 @@ const multicallBalanceProvider = async (
         6
       ),
     };
+    console.log('balances', balances)
     return balances;
   } catch (error) {
     console.log('error', error);

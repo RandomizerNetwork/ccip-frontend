@@ -6,7 +6,7 @@ import useWallet from '@/hooks/useWallet';
 import useGlobalState from '@/store/globalState';
 
 export default function ServicesBalances() {
-  const { chainId, ethersProvider, address } = useWallet();
+  const { chainId, ethersProvider, address, isConnected } = useWallet();
   const [updateBalances] = useGlobalState('updateBalances');
   const [, setBalances] = useGlobalState('balances');
 
@@ -32,7 +32,7 @@ export default function ServicesBalances() {
 
       fetchMultisigBalances();
     }
-  }, [setBalances, updateBalances, chainId, address, ethersProvider]);
+  }, [setBalances, updateBalances, chainId, address, isConnected, ethersProvider]);
 
   return null;
 }

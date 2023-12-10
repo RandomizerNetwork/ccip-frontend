@@ -7,6 +7,8 @@ import { ToastContainer } from 'react-toastify';
 import { Web3ModalProvider } from '@/utils/providers/Web3Modal'
 import ServicesBalances from '@/components/partials/services/ServicesBalances';
 import Layout from '@/components/Layout';
+import VConsole from '@/components/partials/Vconsole';
+import '@total-typescript/ts-reset';
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
@@ -25,8 +27,10 @@ export default function RootLayout({
 }) {
   const isDev = process.env.NEXT_PUBLIC_DEVELOPMENT_NODE_ENV === 'development'
   return (
+    <>
     <html lang="en" suppressHydrationWarning={isDev}>
       <body className={montserrat.className}>
+          <VConsole />
           <Web3ModalProvider>
             <Layout>
               {children}
@@ -43,5 +47,6 @@ export default function RootLayout({
           </Web3ModalProvider>
       </body>
     </html>
+    </>
   )
 }
