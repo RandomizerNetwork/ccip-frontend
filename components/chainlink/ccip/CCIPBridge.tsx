@@ -24,6 +24,13 @@ import CCIPTokenIcon from "./ui/CCIPTokenIcon";
 import RotatingArrow from "@/components/header/partials/RotatingArrow";
 import { v4 as uuidv4 } from 'uuid';
 import { CCIPMenuEnum } from "@/utils/types/store";
+import {
+  FaRegEye,
+  FaRegEyeSlash
+} from "react-icons/fa";
+
+import { getAddress } from '@ethersproject/address';
+
 // TODO CCIP UI
 // [x] 1. FEE TOKENS MINI-MODAL
 // [X] 2. BnM ON EVERY TESTNET CHAIN
@@ -81,8 +88,31 @@ export default function CCIPBridge() {
   const [ccipFees, setCcipFees] = useState<string>("0");
   const [amount, setAmount] = useState<string>("0");
 
+  const [receiverAddress, setReceiverAddress] = useState<string | `0x${string}` | undefined>(address);
+  const [showReceiverAddress, setShowReceiverAddress] = useState(false);
+  
   const [debouncedAmount] = useDebounce(amount, 500); // 500ms delay
 
+  useEffect(() => {
+    if(!receiverAddress) { setReceiverAddress(address); return }
+    if(getAddress(receiverAddress)) {
+      setReceiverAddress(getAddress(address as string))
+      return
+    }
+    if(!getAddress(receiverAddress)) { setReceiverAddress(getAddress(address as string)); return }
+  }, [address, chainId, isConnected, showReceiverAddress])
+
+  const filterReceiverAddress = (value: string) => {
+    try {
+      console.log('valuevaluevaluevalue', value)
+      const filteredValue = getAddress(value as string)
+      if(getAddress(value as string)) setReceiverAddress(getAddress(filteredValue))
+      if(!getAddress(value as string)) setReceiverAddress(getAddress(address as string))
+    } catch (error) {
+      setReceiverAddress(address)
+    }
+  }
+  
   useEffect(() => {
     if (chainId) {
       setFromNetwork(getChainsByID(`0x${chainId.toString(16)}`));
@@ -98,7 +128,7 @@ export default function CCIPBridge() {
       ethersProvider,
       sourceChain: fromNetwork,
       destinationChain: toNetwork,
-      destinationAccount: address ?? "",
+      destinationAccount: receiverAddress ?? "",
       tokenAddress:
         ccipRouterConfig.getRouterConfig(fromNetwork).whitelistedTokens.BnM,
       tokenKey: Object.keys(
@@ -272,7 +302,7 @@ export default function CCIPBridge() {
     if(category === ccipCategories.topCategories[2]) return
     // if(category === ccipCategories.topCategories[2]) setCcipMenu(CCIPMenuEnum.GApb)
   }
-  
+
   return (
     <section className={`w-full mx-auto`}>
       <Lottie
@@ -394,6 +424,21 @@ export default function CCIPBridge() {
                 MAX
               </button>
             </div>
+              <div className="flex justify-between text-lg mt-1 h-7">
+                {!showReceiverAddress && <button onClick={() => setShowReceiverAddress(!showReceiverAddress)}><FaRegEyeSlash/></button>}
+                {showReceiverAddress && 
+                  <>
+                    <button onClick={() => setShowReceiverAddress(!showReceiverAddress)}><FaRegEye/></button>
+                    <div className="flex justify-center items-center mx-2 text-sm">Receiver: </div>
+                    <input
+                      className="w-full bg-chainlinkMirage rounded-lg placeholder-white text-sm text-center"
+                      name="tokenAmount"
+                      value={receiverAddress as string}
+                      onChange={(e) => filterReceiverAddress(e.target.value)}
+                    />
+                  </>
+                }
+              </div>
 
             <CCIPBridgeFeeTokens
               ccipFees={ccipFees}

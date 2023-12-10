@@ -51,7 +51,7 @@ export default function CCIPBridgeFeeTokens({
 
   return (
     <section ref={modalRef}>
-      <div className="flex justify-between mt-4 text-lg">
+      <div className="flex justify-between mt-1 text-lg">
         <div className="flex justify-center items-center text-gray-200">
           Fee
         </div>
