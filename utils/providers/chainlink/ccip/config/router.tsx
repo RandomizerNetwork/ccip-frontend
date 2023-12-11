@@ -63,7 +63,7 @@ const ethereumSepolia = {
   deterministicFactory: "0x9C51DBE256Cd4501b4A3d4E6E45A45CEe8A11C52",
   ccipTokenSenderContract: "",
   whitelistedTokens: {
-    BnM: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05', // BnM for TESTNET
+    BnM: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05',
   },
 };
 
@@ -81,7 +81,7 @@ const ethereumGoerli = {
   deterministicFactory: "0x9C51DBE256Cd4501b4A3d4E6E45A45CEe8A11C52",
   ccipTokenSenderContract: "",
   whitelistedTokens: {
-    BnM: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05', // BnM for TESTNET
+    BnM: '0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05',
   },
 };
 

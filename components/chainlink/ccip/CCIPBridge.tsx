@@ -29,10 +29,10 @@ import CCIPFooterAuthor from "@/components/chainlink/ccip/ui/CCIPFooterAuthor";
 
 // TODO CCIP UI
 // [x] 1. FEE TOKENS MINI-MODAL
-// [X] 2. BnM ON EVERY TESTNET CHAIN
-// [X] 3. BnM BALANCE
-// [X] 4. BnM CCIP MAX AMOUNT AND CHECK BALANCE AMOUNT
-// [x] 5. Multi Approve BnM + Fee Token in steps
+// [X] 2. TOKEN ON EVERY TESTNET CHAIN
+// [X] 3. TOKEN BALANCE
+// [X] 4. TOKEN CCIP MAX AMOUNT AND CHECK BALANCE AMOUNT
+// [x] 5. Multi Approve TOKEN + Fee Token in steps
 // [x] 7. Chain multiple balance calls toghether with MultiCallV3
 // [x] 8. Switch from Goerli to Sepolia Testnet RPC for Arbitrum
 // [x] 9. Upgrade to Web3Modal wallets
@@ -182,7 +182,7 @@ export default function CCIPBridge() {
   };
 
   useEffect(() => {
-    const getBnMFeeTokens = async () => {
+    const getFeeTokens = async () => {
       const availableFeeTokens = ccipRouterConfig.getRouterConfig(fromNetwork).feeTokens;
       // console.log("availableFeeTokens", availableFeeTokens);
       setFeeTokens(availableFeeTokens);
@@ -207,11 +207,11 @@ export default function CCIPBridge() {
         setSelectedFeeSymbol("BNB");
       }
     };
-    getBnMFeeTokens();
+    getFeeTokens();
   }, [fromNetwork, toNetwork, address, chainId]);
 
   useEffect(() => {
-    const getBnMFee = async () => {
+    const getCCIPFee = async () => {
       try {
         if (!details.destinationAccount) return;
         if (fromNetwork === toNetwork) return;
@@ -249,10 +249,10 @@ export default function CCIPBridge() {
         setCcipFees(fees);
         setMessage(message);
       } catch (error) {
-        console.log("error getBnMFee", error);
+        console.log("error getCCIPFee", error);
       }
     };
-    getBnMFee();
+    getCCIPFee();
   }, [fromNetwork, toNetwork, address, details, debouncedAmount, chainId]);
 
   return (

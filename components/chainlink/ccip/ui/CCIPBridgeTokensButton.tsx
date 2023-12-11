@@ -1,24 +1,20 @@
-// CCIPBridgeTokensButton.tsx
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-// import { useSetChain } from '@web3-onboard/react';
 import { BigNumber, ethers } from 'ethers';
 import { formatEther } from '@ethersproject/units';
 import { Message, TransferDetails } from '@/utils/types/ccip';
 import { triggerToast } from '@/utils/helpers/toast';
+import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers5/react';
+import { CCIPMenuEnum } from '@/utils/types/store';
 import useWallet from '@/hooks/useWallet';
 import getChainID from '@/utils/providers/chainlink/ccip/config/chains';
 import ccipRouterConfig from '@/utils/providers/chainlink/ccip/config/router';
-import CCIPTransferTokens from '../utils/CCIPTransferTokens';
 import CCIPApproveModal from './CCIPApproveModal';
 import erc20Abi from '@/utils/providers/chainlink/ccip/abi/IERC20Metadata.json';
 import ccipConfig from '@/utils/providers/chainlink/ccip/config';
 import routerAbi from '@/utils/providers/chainlink/ccip/abi/Router.json';
 import CCIPTokenSenderABI from '@/utils/providers/chainlink/ccip/abi/CCIPTokenSenderABI.json';
-import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers5/react';
-import getChainsByID from '@/utils/providers/chainlink/ccip/config/chainsByID';
 import changeNetwork from '@/utils/helpers/changeNetwork';
 import useGlobalState from '@/store/globalState';
-import { CCIPMenuEnum } from '@/utils/types/store';
 
 interface IBridgeButton {
   fromNetwork: string;
@@ -53,23 +49,20 @@ export default function CCIPBridgeTokensButton({
   }, [fromNetwork, setToNetwork]);
 
   const [retriggerState, setRetriggerState] = useState(false);
-  const [bnmAllowance, setBnMAllowance] = useState('0.00');
+  const [whitelistedTokenAllowance, setWhitelistedTokenAllowance] = useState('0.00');
   const [feeTokenAllowance, setFeeTokenAllowance] = useState('0.00');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalApprovalSelection, setModalApprovalSelection] = useState(true);
 
   // APPROVAL
-  const [bnmApproved, setBnMApproved] = useState(false);
+  const [whitelistedTokenIsApproved, setWhitelistedTokenIsApproved] = useState(false);
   const [feeTokenApproved, setFeeTokenApproved] = useState(false);
 
   // Get the router's address for the specified chain
   const sourceRouterAddress = ccipConfig.getRouterConfig(
     details.sourceChain
   ).address;
-  const sourceChainSelector = ccipConfig.getRouterConfig(
-    details.sourceChain
-  ).chainSelector;
   // Get the chain selector for the target chain
   const destinationChainSelector = ccipConfig.getRouterConfig(
     details.destinationChain
@@ -80,10 +73,9 @@ export default function CCIPBridgeTokensButton({
 
   const amountBN: BigNumber = ethers.utils.parseEther(amount.replace(',', '.'));
 
-  // Function to check BnM approval
-  const checkBnMApproval = async () => {
+  // Function to check if whitelisted token needs approval
+  const checkWhitelistedTokenApproval = async () => {
     try {
-      // Check BnM allowance
       // if (Number(amount) === 0) return;
       if (!ethersProvider) return;
       const signer = ethersProvider.getSigner();
@@ -93,34 +85,31 @@ export default function CCIPBridgeTokensButton({
         erc20Abi,
         ethersProvider
       );
+      // Check Whitelisted Token allowance
       const allowance: BigNumber = await erc20.allowance(
         details.senderAddress,
         ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress
       );
-      setBnMAllowance(
+      setWhitelistedTokenAllowance(
         `${ethers.utils.formatEther(allowance.toString())} ${details.tokenKey}`
       );
-      // console.log('ERC20 allowanceallowance', formatEther(allowance));
-      // console.log('ERC20 amountBNamountBN', formatEther(amountBN));
-      // console.log('ERC20 allowance >= amountBN', allowance >= amountBN);
-      // console.log('ERC20 amountBN >= allowance', amountBN >= allowance);
       if (allowance.gte(amountBN)) {
-        setBnMApproved(true);
+        setWhitelistedTokenIsApproved(true);
         return;
       }
       if (amountBN.gte(allowance)) {
-        setBnMApproved(false);
+        setWhitelistedTokenIsApproved(false);
       }
-      setBnMApproved(false);
+      setWhitelistedTokenIsApproved(false);
     } catch (error) {
-      // console.log('error in checkBnMApproval', error);
-      setBnMApproved(false);
+      setWhitelistedTokenIsApproved(false);
+      // console.log('error in checkWhitelistedTokenApproval', error);
       // triggerToast('ERROR');
     }
   };
 
-  // Function to approve BnM
-  const approveBnM = async () => {
+  // Function to approve whitelisted tokens
+  const approveWhitelistedToken = async () => {
     try {
       if (!chainId) return
       if (`0x${chainId.toString(16)}` !== getChainID(fromNetwork)) {
@@ -128,17 +117,13 @@ export default function CCIPBridgeTokensButton({
         changeNetwork(isConnected, walletProvider, getChainID(fromNetwork));
         return;
       }
-      // First approve the router to spend tokens, after approval, setBnMApproved(true);
       if (!ethersProvider) return 'Missing ethersProvider';
       const signer = ethersProvider.getSigner();
       if (!signer) return 'Missing signer';
-      // if (connectedChain !== getChainID(fromNetwork)) {
-      //   setChain({ chainId: getChainID(fromNetwork) });
-      //   return 'Switching chain';
-      // }
       const erc20 = new ethers.Contract(details.tokenAddress, erc20Abi, signer);
 
       try {
+        // First approve the router to spend tokens, after approval
         const approvalTx = await erc20.approve(
           ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress,
           modalApprovalSelection ? amountBN : ethers.constants.MaxUint256
@@ -150,33 +135,23 @@ export default function CCIPBridgeTokensButton({
           `1 approved router ${ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress} to spend ${amountBN.toString()} 
             of token ${details.tokenAddress}. Transaction: ${approvalTx.hash}`
         );
-        // setBnMApproved(true);
         setRetriggerState(!retriggerState);
         return 'Approval successful';
       } catch (error) {
         triggerToast('ERROR', 'Approval rejected by user!');
-        setBnMApproved(false);
+        setWhitelistedTokenIsApproved(false);
         return 'Already approved';
       }
-      // } else {
-      //   setBnMApproved(true);
-      //   return 'Already approved';
-      // }
     } catch (error) {
-      console.log('error in approveBnM', error);
-      setBnMApproved(false);
+      console.log('error in approveWhitelistedToken', error);
+      setWhitelistedTokenIsApproved(false);
       return 'Error in approval process';
     }
   };
 
-  // Function to check Fee token approval
+  // Function to check Fee token needs approval
   const checkFeeTokenApproval = async () => {
-    // logic to check Fee token approval based on checks);
-    // setFeeTokenApproved(true/false
     try {
-      // Check BnM allowance
-      // if (Number(amount) === 0) return;
-      // if (!details.ethersProvider) return;
       if (!ethersProvider) return 'Missing ethersProvider';
       const signer = ethersProvider.getSigner();
       if (!signer) return;
@@ -190,16 +165,15 @@ export default function CCIPBridgeTokensButton({
           details.senderAddress,
           ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress,
         );
-        // setBnMAllowance(`${ethers.utils.formatEther(allowance.toString())} ${details.tokenKey}`)
         setFeeTokenAllowance(
           `${ethers.utils.formatEther(allowance.toString())} ${
             details.feeTokenSymbol
           }`
         );
-        console.log('FEE allowanceallowance', allowance);
-        console.log('FEE amountBNamountBN', amountBN);
-        console.log('FEE allowance >= amountBN', allowance >= amountBN);
-        console.log('FEE amountBN >= allowance', amountBN > allowance);
+        // console.log('FEE allowanceallowance', allowance);
+        // console.log('FEE amountBNamountBN', amountBN);
+        // console.log('FEE allowance >= amountBN', allowance >= amountBN);
+        // console.log('FEE amountBN >= allowance', amountBN > allowance);
         if (allowance.gte(amountBN)) {
           setFeeTokenApproved(true);
           return
@@ -212,7 +186,7 @@ export default function CCIPBridgeTokensButton({
         setFeeTokenApproved(true);
       }
     } catch (error) {
-      // console.log('error in checkBnMApproval', error);
+      // console.log('error in checkFeeTokenApproval', error);
       setFeeTokenApproved(false);
       // triggerToast('ERROR');
     }
@@ -221,9 +195,7 @@ export default function CCIPBridgeTokensButton({
   // Function to approve Fee token
   const approveFeeToken = async () => {
     try {
-      // Pay native
       // First approve the router to spend tokens
-      // After approval, setBnMApproved(true);
       if (!chainId) return
       if (`0x${chainId.toString(16)}` !== getChainID(fromNetwork)) {
         console.log('`0x${chainId.toString(16)}` !== getChainID(fromNetwork)', `0x${chainId.toString(16)}` !== getChainID(fromNetwork))
@@ -233,17 +205,6 @@ export default function CCIPBridgeTokensButton({
       if (!ethersProvider) return 'Missing ethersProvider';
       const signer = ethersProvider.getSigner();
       if (!signer) return 'Missing signer';
-      // if (connectedChain !== getChainID(fromNetwork)) {
-      //   setChain({ chainId: getChainID(fromNetwork) });
-      //   return 'Switching chain';
-      // }
-
-      // Create a contract instance for the router using its ABI and address
-      // const sourceRouter = new ethers.Contract(
-      //   sourceRouterAddress,
-      //   routerAbi,
-      //   signer
-      // );
 
       // Create a contract instance for the token using its ABI and address
       const erc20 = new ethers.Contract(details.tokenAddress, erc20Abi, signer);
@@ -258,9 +219,6 @@ export default function CCIPBridgeTokensButton({
       if (!details.feeTokenAddress) {
         console.log(`!feeTokenAddress`);
         // Pay native
-        // First approve the router to spend tokens
-        // approvalTx = await erc20.approve(sourceRouterAddress, '0');
-
         if (amountBN > allowance) {
           approvalTx = await erc20.approve(ccipMenu === CCIPMenuEnum.GeneralAccess ? sourceRouterAddress : ccipTokenSenderAddress, amountBN);
           triggerToast('QUEUE_APPROVAL_WAITING');
@@ -332,15 +290,15 @@ export default function CCIPBridgeTokensButton({
       setRetriggerState(!retriggerState);
       return 'Succesfully Approved the CCIP Router to transfer tokens with ERC20 token as fee';
     } catch (error) {
-      console.log('error in approveBnM', error);
-      setBnMApproved(false);
+      console.log('error in approveWhitelistedToken', error);
+      setWhitelistedTokenIsApproved(false);
       triggerToast('ERROR', 'Approval rejected by user!');
       return 'Error in approval process';
     }
   };
 
   useEffect(() => {
-    checkBnMApproval();
+    checkWhitelistedTokenApproval();
     checkFeeTokenApproval();
   }, [
     ccipMenu,
@@ -348,7 +306,7 @@ export default function CCIPBridgeTokensButton({
     chainId,
     ethersProvider,
     address,
-    bnmApproved,
+    whitelistedTokenIsApproved,
     feeTokenApproved,
     retriggerState,
   ]);
@@ -371,7 +329,6 @@ export default function CCIPBridgeTokensButton({
       // console.log('testCCIPTransferTokens', testCCIPTransferTokens);
 
       // Create a contract instance for the router using its ABI and address
-      // if (!ethersProvider) return;
       const signer = ethersProvider.getSigner();
       if (!signer) return;
 
@@ -404,12 +361,6 @@ export default function CCIPBridgeTokensButton({
       }
 
       if(ccipMenu === CCIPMenuEnum.PrivateBeta) {
-        // const sourceRouter = new ethers.Contract(
-        //   sourceRouterAddress,
-        //   routerAbi,
-        //   signer
-        // );
-
         const ccipTokenSenderContract = new ethers.Contract(
           ccipTokenSenderAddress,
           CCIPTokenSenderABI,
@@ -478,13 +429,11 @@ export default function CCIPBridgeTokensButton({
   return (
     <>
       <div className="flex w-full">
-        {!bnmApproved && (
+        {!whitelistedTokenIsApproved && (
           <>
             <button
-              // onClick={() => handleBridgeCall()}
-              onClick={() => approveBnM()}
+              onClick={() => approveWhitelistedToken()}
               type="button"
-              // disabled={true}
               className="flex flex-col border-chainlinkZircon w-10/12 border-t-2 border-l-2 border-b-2 text-center items-center justify-center bg-chainlinkBiscay rounded-l-lg mt-4 h-20 text-xl"
             >
               <div>
@@ -492,7 +441,7 @@ export default function CCIPBridgeTokensButton({
                 {details.tokenKey}{' '}
                 {!modalApprovalSelection && 'permanently'}
               </div>
-              <span className="text-sm">Allowance {bnmAllowance}</span>
+              <span className="text-sm">Allowance {whitelistedTokenAllowance}</span>
             </button>
             <button
               onClick={() => setIsModalOpen(true)}
@@ -512,10 +461,9 @@ export default function CCIPBridgeTokensButton({
           </>
         )}
 
-        {bnmApproved && !feeTokenApproved && (
+        {whitelistedTokenIsApproved && !feeTokenApproved && (
           <>
             <button
-              // onClick={() => handleBridgeCall()}
               onClick={() => approveFeeToken()}
               type="button"
               className="flex flex-col border-chainlinkZircon w-10/12 border-t-2 border-l-2 border-b-2 text-center items-center justify-center bg-chainlinkBiscay rounded-l-lg mt-4 h-20 text-xl"
@@ -542,7 +490,7 @@ export default function CCIPBridgeTokensButton({
           </>
         )}
       </div>
-      {bnmApproved && feeTokenApproved && (
+      {whitelistedTokenIsApproved && feeTokenApproved && (
         <button
           onClick={() => handleBridgeCall()}
           type="button"

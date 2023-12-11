@@ -58,8 +58,6 @@ export default function CCIPBridgeFeeTokens({
         <div className="flex justify-center items-center text-gray-200">
           Fee
         </div>
-        {/* <div>Estimated Fee</div> */}
-        {/* <div>0 BnM</div> */}
         <div className="flex flex-row justify-center items-center">
           <div className="font-thin mr-2">{ccipFees}</div>
           <button
