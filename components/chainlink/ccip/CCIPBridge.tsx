@@ -55,18 +55,18 @@ import CCIPFooterAuthor from "@/components/chainlink/ccip/ui/CCIPFooterAuthor";
 // [x] 20. Add hardhat with deterministic utility contract
 // [x] 21. Deploy deterministic factory contract on 7 chains
 // [x] 22. Deploy deterministic ccip contract on 7 chains
-// [x] 23. Make UI adaptable to both General Access and Private Beta methods with CCIP Single ERC20Token transfer between chains
+// [x] 23. Make UI adaptable to both General Access and Early Access methods with CCIP Single ERC20Token transfer between chains
 // [x] 24. Added optional receiver 
 
 // TODO
 // [x] 1. CCIP Bridge - General Access Single Token
 // [-] 2. CCIP Bridge - General Access Multi Token
-// [x] 3. CCIP Bridge - Private Beta Single Token
-// [-] 4. CCIP Bridge - Private Beta Multi Token
-// [-] 5. CCIP Bridge - Private Beta NFT Bridge
-// [-] 6. CCIP Bridge - Private Beta DeFi Bridge
-// [-] 7. CCIP Bridge - Private Beta P2P Payments Bridge
-// [-] 8. CCIP Bridge - Private Beta Asset TokenizationBridge
+// [x] 3. CCIP Bridge - Early Access Single Token
+// [-] 4. CCIP Bridge - Early Access Multi Token
+// [-] 5. CCIP Bridge - Early Access NFT Bridge
+// [-] 6. CCIP Bridge - Early Access DeFi Bridge
+// [-] 7. CCIP Bridge - Early Access P2P Payments Bridge
+// [-] 8. CCIP Bridge - Early Access Asset TokenizationBridge
 
 export default function CCIPBridge() {
   const { ethersProvider } = useWallet();

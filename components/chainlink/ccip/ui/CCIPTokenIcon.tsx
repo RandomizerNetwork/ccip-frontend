@@ -10,7 +10,7 @@ export default function CCIPTokenIcon() {
       href="https://docs.chain.link/ccip/test-tokens#mint-tokens-in-the-documentation"
     >
       <Image
-        src="/images/tokens/BnM.svg"
+        src="/images/tokens/CCIPIcon.svg"
         loading="lazy"
         alt="Chainlink CCIP logo"
         width={23}

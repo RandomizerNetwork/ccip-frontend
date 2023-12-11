@@ -12,9 +12,9 @@ export default function CCIPHeaderTopMenu() {
     // Implement extra logic here to switch between tabs or handle category selection
     console.log(`Selected category: ${category}`);
     if(category === ccipCategories.topCategories[0]) setCcipMenu(CCIPMenuEnum.GeneralAccess)
-    if(category === ccipCategories.topCategories[1]) setCcipMenu(CCIPMenuEnum.PrivateBeta)
+    if(category === ccipCategories.topCategories[1]) setCcipMenu(CCIPMenuEnum.EarlyAccess)
     if(category === ccipCategories.topCategories[2]) return
-    // if(category === ccipCategories.topCategories[2]) setCcipMenu(CCIPMenuEnum.GApb)
+    // if(category === ccipCategories.topCategories[2]) setCcipMenu(CCIPMenuEnum.GAea)
   }
   
   return (

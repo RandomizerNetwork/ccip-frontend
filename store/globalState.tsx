@@ -16,7 +16,7 @@ const { useGlobalState } = createGlobalState<GlobalTypes>({
     link: '0',
     bnm: '0',
   },
-  ccipMenu: IS_LOCAL ? CCIPMenuEnum.GeneralAccess : CCIPMenuEnum.PrivateBeta,
+  ccipMenu: IS_LOCAL ? CCIPMenuEnum.GeneralAccess : CCIPMenuEnum.EarlyAccess,
   receiverAddress: '',
   // CCIP ROUTES
   fromNetwork: IS_LOCAL ? 'ethereumSepolia' : 'ethereumMainnet',
@@ -30,12 +30,12 @@ const { useGlobalState } = createGlobalState<GlobalTypes>({
   },
   ccipCategories: {
     // top
-    topCategories: ['General Access', 'Private Beta', 'GA + PB'],
+    topCategories: ['General Access', 'Early Access', 'GA + EA'],
     topAddons: ['Single-Token', 'Single-Token', 'Multi-Token'],
     topExtra: ['CCIP ERC20','CCIP ERC20','COMMING SOON'],
     status: ['ACTIVE','',''],
     // bottom
-    categories: ['General Access', 'Private Beta', 'Messages', 'NFT', 'DeFi', 'Random', 'Assets', 'Payments'],
+    categories: ['General Access', 'Early Access', 'Messages', 'NFT', 'DeFi', 'Random', 'Assets', 'Payments'],
     addons: ['Multi-Token', 'Multi-Token', 'Contract-Call', 'Crosschain', 'Liqudity LP', 'Events', 'Tokenization', 'P2P'],
     extra: ['ERC20/ERC677','ERC20/ERC677','CCIP','ERC721/ERC1155','VRF+Keepers','Crosschain', 'Proof of reserve','CCIP'],
   },

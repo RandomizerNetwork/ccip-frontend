@@ -10,10 +10,9 @@ export type CCIPMessage = {
 
 export enum CCIPMenuEnum {
   GeneralAccess = "General Access",
-  PrivateBeta = "Private Beta",
-  GApb = "GA + PB", // General Access + Private Beta
+  EarlyAccess = "Early Access",
+  GAea = "GA + EA", // General Access + Early Access
 }
-
 
 export type CCIPCategories = {
   // top

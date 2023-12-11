@@ -14,7 +14,7 @@ export default function CCIPHeaderSection() {
         >
           <div className="flex">
             <Image
-              src="/images/tokens/BnM.svg"
+              src="/images/tokens/CCIPIcon.svg"
               loading="lazy"
               alt="Chainlink CCIP logo"
               width={23}

@@ -58,15 +58,7 @@ const getProviderRpcUrl = (network: string) => {
   return rpcUrl;
 };
 
-const getPrivateKey = () => {
-  const privateKey = process.env.PRIVATE_KEY;
-  if (!privateKey)
-    console.log('private key not provided - check your environment variables');
-  return privateKey;
-};
-
 const env = {
-  getPrivateKey,
   getProviderRpcUrl,
 };
 

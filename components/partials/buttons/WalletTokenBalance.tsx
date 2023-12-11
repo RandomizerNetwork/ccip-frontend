@@ -2,7 +2,7 @@ import daiLogo from '@/public/images/tokens/multi-collateral-dai-logo.svg';
 import usdtLogo from '@/public/images/tokens/tether-usdt-logo.svg';
 import usdcLogo from '@/public/images/tokens/usd-coin-usdc-logo.svg';
 import linkLogo from '@/public/images/tokens/chainlink-equal-width-height.svg';
-import bnmLogo from '@/public/images/tokens/BnM.svg';
+import bnmLogo from '@/public/images/tokens/CCIPIcon.svg';
 import BalancesRow from '../network/BalanceRow';
 import useGlobalState from '@/store/globalState';
 import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
@@ -58,7 +58,7 @@ export default function WalletTokenBalance() {
         />
         <BalancesRow
           logo={bnmLogo}
-          label="BnM"
+          label="CCIP"
           balance={balances.bnm}
           isLast={true}
         />

@@ -360,7 +360,7 @@ export default function CCIPBridgeTokensButton({
         triggerToast('SUCCESS', `Succesfully sent ${details.feeTokenSymbol}`);
       }
 
-      if(ccipMenu === CCIPMenuEnum.PrivateBeta) {
+      if(ccipMenu === CCIPMenuEnum.EarlyAccess) {
         const ccipTokenSenderContract = new ethers.Contract(
           ccipTokenSenderAddress,
           CCIPTokenSenderABI,
@@ -469,7 +469,7 @@ export default function CCIPBridgeTokensButton({
               className="flex flex-col border-chainlinkZircon w-10/12 border-t-2 border-l-2 border-b-2 text-center items-center justify-center bg-chainlinkBiscay rounded-l-lg mt-4 h-20 text-xl"
             >
               Approve {details.feeTokenSymbol} Fee
-              {modalApprovalSelection ? '' : 'permanently'}
+              {modalApprovalSelection ? '' : ' permanently'}
               <span className="text-sm">Allowance {feeTokenAllowance}</span>
             </button>
             <button
