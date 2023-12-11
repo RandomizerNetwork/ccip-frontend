@@ -343,6 +343,7 @@ export default function CCIPBridgeTokensButton({
     checkBnMApproval();
     checkFeeTokenApproval();
   }, [
+    ccipMenu,
     details,
     chainId,
     ethersProvider,
