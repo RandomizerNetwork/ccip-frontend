@@ -9,6 +9,7 @@ import ServicesBalances from '@/components/partials/services/ServicesBalances';
 import Layout from '@/components/Layout';
 import VConsole from '@/components/partials/Vconsole';
 import '@total-typescript/ts-reset';
+import Analytics from '@/components/header/Analytics';
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
@@ -44,6 +45,7 @@ export default function RootLayout({
                 />
             </Layout>
             <ServicesBalances />
+            <Analytics />
           </Web3ModalProvider>
       </body>
     </html>
