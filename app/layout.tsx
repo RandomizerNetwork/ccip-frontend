@@ -8,8 +8,8 @@ import { Web3ModalProvider } from '@/utils/providers/Web3Modal'
 import ServicesBalances from '@/components/partials/services/ServicesBalances';
 import Layout from '@/components/Layout';
 import VConsole from '@/components/partials/Vconsole';
+import GoogleAnalytics from '@/components/header/GoogleAnalytics';
 import '@total-typescript/ts-reset';
-import Analytics from '@/components/header/Analytics';
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
@@ -45,7 +45,7 @@ export default function RootLayout({
                 />
             </Layout>
             <ServicesBalances />
-            <Analytics />
+            <GoogleAnalytics />
           </Web3ModalProvider>
       </body>
     </html>
