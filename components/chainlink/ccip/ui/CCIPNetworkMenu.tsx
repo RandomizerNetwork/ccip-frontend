@@ -1,3 +1,5 @@
+"use client";
+
 import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { useWindowSize } from 'usehooks-ts';
 import { IS_LOCAL } from '@/constants/networks';

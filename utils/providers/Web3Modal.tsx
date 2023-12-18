@@ -142,10 +142,6 @@ createWeb3Modal({
   ethersConfig: defaultConfig({ metadata }),
   chains: liveChains,
   projectId,
-  chainImages: {
-    11155111: "/images/networks/ethereum-eth-logo-diamond-purple.svg",
-    80001: "/images/networks/polygon-matic-logo.svg",
-  },
   termsConditionsUrl: "https://www.randomizer.network/terms-and-conditions",
   privacyPolicyUrl: "https://www.randomizer.network/privacy-policy",
   themeMode: "light",

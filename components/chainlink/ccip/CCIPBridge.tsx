@@ -1,5 +1,5 @@
-// CCIPBridge.tsx
 "use client";
+// CCIPBridge.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { useDebounce } from "use-debounce";

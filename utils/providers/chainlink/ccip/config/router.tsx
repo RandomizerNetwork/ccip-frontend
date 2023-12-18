@@ -367,7 +367,7 @@ const getRouterConfig = (network: string) => {
     case 'binanceTestnet':
       return binanceTestnet;
     default:
-      return IS_LOCAL ? polygonMumbai : polygonMainnet;
+      return IS_LOCAL ? ethereumSepolia : ethereumMainnet;
   }
 };
 

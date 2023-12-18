@@ -1,3 +1,5 @@
+"use client";
+
 // CCIPApproveModal.tsx
 // import { formatEther } from '@ethersproject/units';
 // import { BigNumber } from 'ethers';

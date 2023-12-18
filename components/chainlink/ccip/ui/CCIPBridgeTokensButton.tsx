@@ -1,3 +1,5 @@
+"use client";
+
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { formatEther } from '@ethersproject/units';

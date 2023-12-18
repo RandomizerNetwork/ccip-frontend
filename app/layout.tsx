@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import { ToastContainer } from 'react-toastify';
 import { Web3ModalProvider } from '@/utils/providers/Web3Modal'
+// import { Analytics } from '@vercel/analytics/react';
 import ServicesBalances from '@/components/partials/services/ServicesBalances';
 import Layout from '@/components/Layout';
 import VConsole from '@/components/partials/Vconsole';
@@ -45,6 +46,7 @@ export default function RootLayout({
                 />
             </Layout>
             <ServicesBalances />
+            {/* <Analytics /> */}
             <GoogleAnalytics />
           </Web3ModalProvider>
       </body>

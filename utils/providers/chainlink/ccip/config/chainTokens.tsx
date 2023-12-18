@@ -12,112 +12,128 @@ const getChainTokens = (chainID: string) => {
         nativeToken: 'ETH',
         symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0xaa36a7': // 'ethereumSepolia':
       chainTokens = {
         nativeToken: 'ETH',
-        symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0x5': // 'ethereumGoerli':
       chainTokens = {
         nativeToken: 'ETH',
-        symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0x2105': // 'baseMainnet':
       chainTokens = {
         nativeToken: 'ETH',
-        symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0x14a33': // 'baseGoerli':
       chainTokens = {
         nativeToken: 'ETH',
-        symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0xa': // 'optimismMainnet':
       chainTokens = {
         nativeToken: 'ETH',
-        symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0x1a4': // 'optimismGoerli':
       chainTokens = {
         nativeToken: 'ETH',
-        symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0xa4b1': // 'arbitrumMainnet':
       chainTokens = {
         nativeToken: 'ETH',
-        symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0x66eed': // 'arbitrumGoerli':
       chainTokens = {
         nativeToken: 'ETH',
-        symbolLogo: logoETH,
         nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
       break;
     case '0xa86a': // 'avalancheMainnet':
       chainTokens = {
         nativeToken: 'AVAX',
-        symbolLogo: logoAVAX,
         nativeWrappedToken: 'WAVAX',
+        symbolLogo: logoAVAX,
+        symbolUrl: `/images/networks/png/avalanche.png`
       };
       break;
     case '0xa869': // 'avalancheFuji':
       chainTokens = {
         nativeToken: 'AVAX',
-        symbolLogo: logoAVAX,
         nativeWrappedToken: 'WAVAX',
+        symbolLogo: logoAVAX,
+        symbolUrl: `/images/networks/png/avalanche.png`
       };
       break;
     case '0x89': // 'polygonMainnet':
       chainTokens = {
         nativeToken: 'MATIC',
-        symbolLogo: logoMATIC,
         nativeWrappedToken: 'WMATIC',
+        symbolLogo: logoMATIC,
+        symbolUrl: `/images/networks/png/matic.png`
       };
       break;
     case '0x13881': // 'polygonMumbai':
       chainTokens = {
         nativeToken: 'MATIC',
-        symbolLogo: logoMATIC,
         nativeWrappedToken: 'WMATIC',
+        symbolLogo: logoMATIC,
+        symbolUrl: `/images/networks/png/matic.png`
       };
       break;
     case '0x38': // 'binanceMainnet':
       chainTokens = {
         nativeToken: 'BNB',
-        symbolLogo: logoBNB,
         nativeWrappedToken: 'WBNB',
+        symbolLogo: logoBNB,
+        symbolUrl: `/images/networks/png/bnb.png`
       };
       break;
     case '0x61': // 'binanceTestnet':
       chainTokens = {
         nativeToken: 'BNB',
-        symbolLogo: logoBNB,
         nativeWrappedToken: 'WBNB',
+        symbolLogo: logoBNB,
+        symbolUrl: `/images/networks/png/bnb.png`
       };
       break;
     default:
       console.log(`Unknown chainID: ${chainID}`);
       chainTokens = {
-        nativeToken: 'MATIC',
-        symbolLogo: logoMATIC,
-        nativeWrappedToken: 'WMATIC',
+        nativeToken: 'ETH',
+        nativeWrappedToken: 'WETH',
+        symbolLogo: logoETH,
+        symbolUrl: `/images/networks/png/ethereum.png`
       };
   }
 
@@ -126,9 +142,10 @@ const getChainTokens = (chainID: string) => {
       `chainTokens empty for chainID ${chainID} - check your environment variables`
     );
     chainTokens = {
-      nativeToken: 'MATIC',
-      symbolLogo: logoMATIC,
-      nativeWrappedToken: 'WMATIC',
+      nativeToken: 'ETH',
+      nativeWrappedToken: 'WETH',
+      symbolLogo: logoETH,
+      symbolUrl: `/images/networks/png/ethereum.png`
     };
   }
   return chainTokens;

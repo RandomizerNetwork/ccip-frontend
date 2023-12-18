@@ -19,6 +19,7 @@
     "@next/third-parties": "^14.0.4",
     "@total-typescript/ts-reset": "^0.5.1",
     "@vconsole": "link:types/@vconsole",
+    "@vercel/analytics": "^1.1.1",
     "@web3modal/core": "^3.4.0",
     "@web3modal/ethers5": "^3.4.0",
     "@web3modal/wagmi": "^3.4.0",

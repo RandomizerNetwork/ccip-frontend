@@ -1,3 +1,5 @@
+'use client';
+
 import useGlobalState from '@/store/globalState';
 import { getAddress } from '@ethersproject/address';
 import { useWeb3ModalAccount } from '@web3modal/ethers5/react';

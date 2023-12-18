@@ -1,4 +1,6 @@
+"use client";
 // LeftDrawer.tsx
+
 import React, { useEffect, useRef } from 'react';
 import { RiWechatChannelsLine } from 'react-icons/ri';
 import Link from 'next/link';

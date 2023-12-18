@@ -1,3 +1,5 @@
+"use client";
+
 import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import RotatingArrow from '@/components/header/partials/RotatingArrow';
 import CCIPNetworkFeeTokenIcon from './CCIPNetworkFeeTokenIcon';

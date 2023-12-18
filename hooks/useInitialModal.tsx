@@ -1,3 +1,4 @@
+"use client";
 // hooks/useInitialModal.js
 import { useEffect, useState } from 'react';
 

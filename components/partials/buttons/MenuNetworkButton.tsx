@@ -1,3 +1,4 @@
+"use client";
 // MenuNetworkButton.tsx
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,7 +25,7 @@ export default function MenuNetworkButton() {
       let counter = 0;
       for (let i = 0; i < liveChains.length; i += 1) {
         if (chainId === liveChains[i].chainId) {
-          setActiveChainLabel(liveChains[i].name ?? '');
+          setActiveChainLabel(liveChains[i].name);
         } else {
           counter += 1;
           if (counter === liveChains.length) {

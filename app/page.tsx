@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CCIPBridge from '@/components/chainlink/ccip/CCIPBridge';
 
 export default function ChainlinkCCIPBridge() {

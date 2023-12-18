@@ -58,7 +58,7 @@ export default function WalletTokenBalance() {
         />
         <BalancesRow
           logo={bnmLogo}
-          label="CCIP"
+          label="BnM"
           balance={balances.bnm}
           isLast={true}
         />
